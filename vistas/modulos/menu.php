@@ -93,7 +93,7 @@
 		echo  '<li class="' . ($currentPage == 'cotizar' ? 'active' : '') . '">
 				<a href="cotizar">
 					<i class="fa fa-car"></i>
-					<span>Cotizaciones masivas liviano</span>
+					<span>Cotizar Livanos</span>
 				</a>
 			</li>';
 	?>
