@@ -950,6 +950,17 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                       <div class="col-md-3"></div>
                     </div>
                   </div>
+                  <div>
+                        <p>¿Por qué algunas compañías no cotizan? R/. 0. Tiene póliza vigente con esa compañía. 1. Aseguradora
+                            caída, en mantenimiento o en actualización. 2. RUNT, Cexper, Sistema Fasecolda caído. 3. Fallas Portal
+                            Integradoor. 4. Vehículo fuera de políticas por marca, línea o modelo. 5. Ciudad bloqueada. 6. Error en
+                            validación datos del asegurado. 7. Valor asegurado no autorizado para cotizar vía webservice. 8. Vehículo
+                            salvamento. 9. Motos, Pesados, Públicos no se cotizan por este módulo. 10. Personas Jurídicas se cotizan
+                            manualmente. 11. Algunas aseguradoras no cotizan 0 km vía webservice. 12. Vehículo bloqueado por cotización
+                            vigente con otro asesor (ej. Solidaria). 13. Mal uso del usuario registrando espacios o caracteres en placas,
+                            nombres, apellidos o documentos de identidad
+                        </p>
+                      </div>
                 </div>
                 <div class="aviso-container col-lg-12">
                     <p style="font-weight: bold;">
