@@ -1,8 +1,13 @@
 <?php
 
+// $DB_host = "localhost";
+// $DB_user = "root";
+// $DB_pass = "";
+// $DB_name = "grupoasi_cotizautos";
+
 $DB_host = "localhost";
-$DB_user = "root";
-$DB_pass = "";
+$DB_user = "grupoasi_cotizautos";
+$DB_pass = "M1graci0n123";
 $DB_name = "grupoasi_cotizautos";
 
 echo "<script>console.log('Mi array ', " . json_encode($_SESSION) . ")</script>";
