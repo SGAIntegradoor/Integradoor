@@ -949,18 +949,19 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                         </div>
                       <div class="col-md-3"></div>
                     </div>
-                  </div>
-                  <div>
-                        <p>¿Por qué algunas compañías no cotizan? R/. 0. Tiene póliza vigente con esa compañía. 1. Aseguradora
-                            caída, en mantenimiento o en actualización. 2. RUNT, Cexper, Sistema Fasecolda caído. 3. Fallas Portal
-                            Integradoor. 4. Vehículo fuera de políticas por marca, línea o modelo. 5. Ciudad bloqueada. 6. Error en
-                            validación datos del asegurado. 7. Valor asegurado no autorizado para cotizar vía webservice. 8. Vehículo
-                            salvamento. 9. Motos, Pesados, Públicos no se cotizan por este módulo. 10. Personas Jurídicas se cotizan
-                            manualmente. 11. Algunas aseguradoras no cotizan 0 km vía webservice. 12. Vehículo bloqueado por cotización
-                            vigente con otro asesor (ej. Solidaria). 13. Mal uso del usuario registrando espacios o caracteres en placas,
+                    <div>
+                        <p><strong>¿Por qué algunas compañías no cotizan? R/. 0.</strong>Tiene póliza vigente con esa compañía. <strong>1.</strong> Aseguradora
+                            caída, en mantenimiento o en actualización. <strong>2.</strong> RUNT, Cexper, Sistema Fasecolda caído. <strong>3.</strong> Fallas Portal
+                            Integradoor. <strong>4.</strong> Vehículo fuera de políticas por marca, línea o modelo. <strong>5.</strong> Ciudad bloqueada. <strong>6.</strong> Error en
+                            validación datos del asegurado. <strong>7.</strong> Valor asegurado no autorizado para cotizar vía webservice. <strong>8.</strong> Vehículo
+                            salvamento. <strong>9.</strong> Motos, Pesados, Públicos no se cotizan por este módulo. <strong>10.</strong> Personas Jurídicas se cotizan
+                            manualmente. <strong>11.</strong> Algunas aseguradoras no cotizan 0 km vía webservice. <strong>12.</strong> Vehículo bloqueado por cotización
+                            vigente con otro asesor (ej. Solidaria). <strong>13.</strong> Mal uso del usuario registrando espacios o caracteres en placas,
                             nombres, apellidos o documentos de identidad
                         </p>
-                      </div>
+                  </div>
+                  </div>
+                  
                 </div>
                 <div class="aviso-container col-lg-12">
                     <p style="font-weight: bold;">
