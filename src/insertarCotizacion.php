@@ -3,38 +3,38 @@ session_start();
 /* Conectar a la base de datos*/
 require_once("../config/db.php"); //Contiene las variables de configuracion para conectar a la base de datos
 require_once("../config/conexion.php"); //Contiene funcion que conecta a la base de datos
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $jsonData = file_get_contents('php://input');
+    $response = json_decode($jsonData, true);
 
-$placa = $_POST['placa'];
-$esCeroKm = $_POST['esCeroKm'];
-$idCliente = $_POST['idCliente'];
-$tipoDocumento = $_POST['tipoDocumento'];
-$numIdentificacion = $_POST['numIdentificacion'];
-$Nombre = $_POST["Nombre"];
-$Apellido = $_POST["Apellido"];
-$FechaNacimiento = $_POST["FechaNacimiento"];
-$Genero = $_POST["Genero"];
-$EstCivil = $_POST["EstadoCivil"];
-$Celular = $_POST["Celular"];
-$Correo = $_POST["Correo"];
-$Direccion = $_POST["direccionAseg"];
-$CodigoClase = $_POST["CodigoClase"];
-$Clase = $_POST["Clase"];
-$Marca = $_POST['Marca'];
-$Modelo = $_POST['Modelo'];
-$Linea = $_POST['Linea'];
-$Fasecolda = $_POST['Fasecolda'];
-$ValorAsegurado = $_POST["ValorAsegurado"];
-$tipoUsoVehiculo = $_POST["tipoUsoVehiculo"];
-$tipoServicio = $_POST["tipoServicio"];
-$Departamento = $_POST["Departamento"];
-$Ciudad = $_POST["Ciudad"];
-$benefOneroso = $_POST["benefOneroso"];
-$idCotizacion = $_POST["idCotizacion"];
-$idUsuario = $_SESSION["idUsuario"];
-$mundial = $_POST["mundial"];
-if ($mundial === "") {
-    $mundial = NULL;
-}
+	$placa = $response['placa'];
+	$esCeroKm = $response['esCeroKm'];
+	$idCliente = $response['idCliente'];
+	$tipoDocumento = $response['tipoDocumento'];
+	$numIdentificacion = $response['numIdentificacion'];
+	$Nombre = $response["Nombre"];
+	$Apellido = $response["Apellido"];
+	$FechaNacimiento = $response["FechaNacimiento"];
+	$Genero = $response["Genero"];
+	$EstCivil = $response["EstadoCivil"];
+	$Celular = $response["Celular"];
+	$Correo = $response["Correo"];
+	$Direccion = $response["direccionAseg"];
+	$CodigoClase = $response["CodigoClase"];
+	$Clase = $response["Clase"];
+	$Marca = $response['Marca'];
+	$Modelo = $response['Modelo'];
+	$Linea = $response['Linea'];
+	$Fasecolda = $response['Fasecolda'];
+	$ValorAsegurado = $response["ValorAsegurado"];
+	$tipoUsoVehiculo = $response["tipoUsoVehiculo"];
+	$tipoServicio = $response["tipoServicio"];
+	$Departamento = $response["Departamento"];
+	$Ciudad = $response["Ciudad"];
+	$benefOneroso = $response["benefOneroso"];
+	$idCotizacion = $response["idCotizacion"];
+	$idUsuario = $_SESSION["idUsuario"];
+	$mundial = isset($response['mundial']) ? $response['mundial'] : null;
 
 // VALIDAMOS SI VIENE EL CODIGO DEL CLIENTE Y DE LO CONTRARIO SE CREA EN LA BD
 if ($idCliente == "") {
@@ -166,3 +166,9 @@ else{
 	}
 
 }
+
+} else {
+    // Si la solicitud no es POST, devolver un mensaje de error
+    echo "Error: Solo se permiten solicitudes POST";
+}
+
