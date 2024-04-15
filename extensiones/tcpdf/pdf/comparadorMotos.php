@@ -11,6 +11,14 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
 
 $identificador = $_GET['cotizacion'];
 
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 0);
+
+// $server = "localhost";
+// $user = "root";
+// $password = ""; //poner tu propia contraseña, si tienes una.
+// $bd = "grupoasi_cotizautos";
+
 $server = "localhost";
 $user = "root";
 $password = ""; //poner tu propia contraseña, si tienes una.

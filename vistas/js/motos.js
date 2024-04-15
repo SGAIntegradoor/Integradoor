@@ -1084,52 +1084,63 @@ if(tipoServicio == "11" || tipoServicio == "12"){
 
   if(!primerIntentoRealizado){
     primerIntentoRealizado = true
-    $.ajax({
-      type: "POST",
-      url: "src/insertarCotizacion.php",
-      dataType: "json",
-      data: {
-        placa: placa,
-        esCeroKm: esCeroKmInt,
-        idCliente: idCliente,
-        tipoDocumento: tipoDocumentoID,
-        numIdentificacion: numDocumentoID,
-        Nombre: Nombre,
-        Apellido: Apellido1,
-        FechaNacimiento: FechaNacimiento,
-        Genero: Genero,
-        EstadoCivil: estadoCivil,
-        Celular: "",
-        Correo: "",
-        direccionAseg: direccionAseg,
-        CodigoClase: condicional,
-        Clase: claseVeh,
-        Marca: marca,
-        Modelo: modelovehiculo,
-        Linea: linea,
-        Fasecolda: fasecoldaVeh,
-        ValorAsegurado: valorfasecoldaVeh,
-        tipoUsoVehiculo: tipoUsoVehiculo,
-        tipoServicio: tipoServicio,
-        Departamento: DptoCirculacion,
-        Ciudad: ciudadCirculacion,
-        benefOneroso: benefOneroso,
-        idCotizacion: idCotizacion,
+    let requestBody = {
+      placa: placa,
+      esCeroKm: esCeroKmInt,
+      idCliente: idCliente,
+      tipoDocumento: tipoDocumentoID,
+      numIdentificacion: numDocumentoID,
+      Nombre: Nombre,
+      Apellido: Apellido1,
+      FechaNacimiento: FechaNacimiento,
+      Genero: Genero,
+      EstadoCivil: estadoCivil,
+      Celular: "",
+      Correo: "",
+      direccionAseg: direccionAseg,
+      CodigoClase: condicional,
+      Clase: claseVeh,
+      Marca: marca,
+      Modelo: modelovehiculo,
+      Linea: linea,
+      Fasecolda: fasecoldaVeh,
+      ValorAsegurado: valorfasecoldaVeh,
+      tipoUsoVehiculo: tipoUsoVehiculo,
+      tipoServicio: tipoServicio,
+      Departamento: DptoCirculacion,
+      Ciudad: ciudadCirculacion,
+      benefOneroso: benefOneroso,
+      idCotizacion: idCotizacion,
+    };
+    
+    // Configurar las opciones de la solicitud Fetch
+    // Realizar la solicitud Fetch
+    fetch("src/insertarCotizacion.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Agrega cualquier otra cabecera que necesites aquí
       },
-      cache: false,
-      success: function (data) {
+      body: JSON.stringify(requestBody),
+    } )
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data) 
         const contenParrilla = document.querySelector('#contenParrilla')
         contenParrilla.style.display = 'block'
         idCotizacion = data.id_cotizacion;
         raw.cotizacion = idCotizacion
-        console.log(data)
-        console.log(data.id_cotizacion)
-      var requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: JSON.stringify(raw),
-          redirect: "follow",
-        };
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify(raw),
+            redirect: "follow",
+          };
 
         let cont = [];
         const aseguradorasExitosas = new Set();
@@ -1334,9 +1345,14 @@ if(tipoServicio == "11" || tipoServicio == "12"){
           .catch((error) => {
           console.error(error);
           });
-    
-        },
-    });
+
+
+
+      })
+      .catch((error) => {
+        // Manejar errores de la solicitud Fetch aquí
+        console.error(error);
+      });
 
   }else{
 
