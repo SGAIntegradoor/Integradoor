@@ -950,7 +950,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                       <div class="col-md-3"></div>
                     </div>
                     <div>
-                        <p><strong>¿Por qué algunas compañías no cotizan? R/. 0.</strong>Tiene póliza vigente con esa compañía. <strong>1.</strong> Aseguradora
+                        <p class="text-justify"><strong>¿Por qué algunas compañías no cotizan? R/. 0.</strong>Tiene póliza vigente con esa compañía. <strong>1.</strong> Aseguradora
                             caída, en mantenimiento o en actualización. <strong>2.</strong> RUNT, Cexper, Sistema Fasecolda caído. <strong>3.</strong> Fallas Portal
                             Integradoor. <strong>4.</strong> Vehículo fuera de políticas por marca, línea o modelo. <strong>5.</strong> Ciudad bloqueada. <strong>6.</strong> Error en
                             validación datos del asegurado. <strong>7.</strong> Valor asegurado no autorizado para cotizar vía webservice. <strong>8.</strong> Vehículo
