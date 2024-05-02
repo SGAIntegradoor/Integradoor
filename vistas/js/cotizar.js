@@ -354,7 +354,7 @@ function consultarAsegurado() {
 
   $.ajax({
     type: "POST",
-    url: "qas/src/consultarAsegurado.php",
+    url: "src/consultarAsegurado.php",
     dataType: "json",
     data: { tipoDocumento: tipoDocumentoID, numDocumento: numDocumentoID },
     success: function (data) {
