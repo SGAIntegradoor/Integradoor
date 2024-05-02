@@ -442,6 +442,19 @@ class ControladorUsuarios{
 	}
 
 	/*=============================================
+	CHECKEAR ESTADO USUARIO
+	=============================================*/
+
+	static public function ctrUserCheckState($valor){
+
+		$tabla = "usuarios";
+		$item = "usu_documento";
+
+		$respuesta = ModeloUsuarios::mdlUserCheckState($tabla, $item, $valor);
+		return $respuesta;
+	}
+
+	/*=============================================
 	EDITAR USUARIO
 	=============================================*/
 
@@ -721,6 +734,7 @@ class ControladorUsuarios{
 		}
 
 	}
+
 
 
 }

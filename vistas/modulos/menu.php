@@ -9,6 +9,14 @@
            return 'active';
         }
     }
+
+//::::::::::::::::::::::::::::::::Consulta el estado actual del usuario:::::::::::::::::::::::::::::://
+//:::Cierra la sesion si el estado es 0 y en su proxima interaccion con el software lo desconecta::://
+include_once 'config/checkUser.php';
+checkUserStatus();
+//::::::::::::::::::::::::::::::::Fin del metodo::::::::::::::::::::::::::::::::::::::::::::::::::::://
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
+
 ?>
 
 <aside class="main-sidebar">
@@ -191,7 +199,7 @@
 		PRODUCTOS
 		=============================================*/	
 		if($_SESSION["permisos"]["Modificaciondeproductos"] == "x"){	
-			echo '<li class="' . ($currentPage == 'productos' ? 'active' : '') . '">
+			echo '<li class="' . ($currentPage == 'Productos' ? 'active' : '') . '">
 				<a href="Productos">
 					<i class="fa fa-folder"></i>
 					<span>Productos</span>

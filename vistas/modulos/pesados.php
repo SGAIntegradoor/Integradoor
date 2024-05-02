@@ -1,16 +1,9 @@
 <?php
 
-// $DB_host = "localhost";
-// $DB_user = "root";
-// $DB_pass = "";
-// $DB_name = "grupoasi_cotizautos";
-
 $DB_host = "localhost";
-$DB_user = "grupoasi_cotizautos";
-$DB_pass = "M1graci0n123";
+$DB_user = "root";
+$DB_pass = "";
 $DB_name = "grupoasi_cotizautos";
-
-echo "<script>console.log('Mi array ', " . json_encode($_SESSION) . ")</script>";
 
 $enlace = mysqli_connect("$DB_host", "$DB_user", "$DB_pass", "$DB_name");
 if (!$enlace) {
@@ -29,16 +22,59 @@ function obtenerCredenciales($enlace, $tabla, $columnas, $idIntermediario) {
   if ($numerofilas > 0) {
       return $fila;
   } else {
-      $query2 = "SELECT * FROM `$tabla` WHERE `id_intermediario` = 3";
-      $ejecucion2 = mysqli_query($enlace, $query2);
-      $fila2 = mysqli_fetch_assoc($ejecucion2);
-      return $fila2;
+      
+      return false;
   }
 }
 
-// FUNCION PARA OBTENER CREDENCIALES AXA
-$creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', $_SESSION['intermediario']);
 
+// FUNCION PARA OBTENER CREDENCIALES SBS
+if ($aseguradoras['SBS']['C'] == "1") {
+
+  $creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS2', '*', $_SESSION['intermediario']);
+  
+}else{
+
+  $creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS2', '*', '3');
+
+}
+$cre_sbs_usuario = $creSBS['cre_sbs_usuario'];
+$cre_sbs_contrasena = $creSBS['cre_sbs_contrasena'];
+
+// Lógica para ALLIANZ
+if ($aseguradoras['Allianz']['C'] == "1") {
+  $creAllianz = obtenerCredenciales($enlace, 'Credenciales_Allianz', '*', $_SESSION['intermediario']);
+
+} else {
+  $creAllianz = obtenerCredenciales($enlace, 'Credenciales_Allianz', '*', '3');
+}
+$cre_alli_sslcertfile = $creAllianz['cre_alli_sslcertfile'];
+$cre_alli_sslkeyfile = $creAllianz['cre_alli_sslkeyfile'];
+$cre_alli_passphrase = $creAllianz['cre_alli_passphrase'];
+$cre_alli_partnerid = $creAllianz['cre_alli_partnerid'];
+$cre_alli_agentid = $creAllianz['cre_alli_agentid'];
+$cre_alli_partnercode = $creAllianz['cre_alli_partnercode'];
+$cre_alli_agentcode = $creAllianz['cre_alli_agentcode'];
+
+// Lógica para ESTADO
+if ($aseguradoras['Estado']['C'] == "1") {
+  $creEstado = obtenerCredenciales($enlace, 'Credenciales_Estado', '*', $_SESSION['intermediario']);
+
+} else {
+  $creEstado = obtenerCredenciales($enlace, 'Credenciales_Estado', '*', '3');
+}
+$cre_est_usuario = $creEstado['cre_est_usuario'];
+$cre_equ_contrasena = $creEstado['cre_equ_contrasena'];
+$Cre_Est_Entity_Id = $creEstado['Cre_Est_Entity_Id'];
+$cre_est_zona = $creEstado['cre_est_zona'];
+
+// Lógica para AXA
+if ($aseguradoras['AXA']['C'] == "1") {
+  $creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', $_SESSION['intermediario']);
+
+} else {
+  $creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', '3');
+}
 $cre_axa_sslcertfile = $creAXA['cre_axa_sslcertfile'];
 $cre_axa_sslkeyfile = $creAXA['cre_axa_sslkeyfile'];
 $cre_axa_passphrase = $creAXA['cre_axa_passphrase'];
@@ -48,6 +84,37 @@ $cre_axa_codigoDivipola = $creAXA['cre_axa_codigoDivipola'];
 $cre_axa_canal = $creAXA['cre_axa_canal'];
 $cre_axa_validacionEventos = $creAXA['cre_axa_validacionEventos'];
 $url_axa = $creAXA['url_axa'];
+
+// Lógica para SOLIDARIA
+if ($aseguradoras['Solidaria']['C'] == "1") {
+  $creSolidaria = obtenerCredenciales($enlace, 'Credenciales_Solidaria', '*', $_SESSION['intermediario']);
+
+} else {
+  $creSolidaria = obtenerCredenciales($enlace, 'Credenciales_Solidaria', '*', '3');
+}
+$cre_sol_id = $creSolidaria['cre_sol_id'] ?? null;
+$id_Intermediario = $creSolidaria['id_Intermediario'] ?? null;
+$cre_sol_cod_sucursal = $creSolidaria['cre_sol_cod_sucursal'] ?? null;
+$cre_sol_cod_per = $creSolidaria['cre_sol_cod_per'] ?? null;
+$cre_sol_cod_tipo_agente = $creSolidaria['cre_sol_cod_tipo_agente'] ?? null;
+$cre_sol_cod_agente = $creSolidaria['cre_sol_cod_agente'] ?? null;
+$cre_sol_cod_pto_vta = $creSolidaria['cre_sol_cod_pto_vta'] ?? null;
+$cre_sol_grant_type = $creSolidaria['cre_sol_grant_type'] ?? null;
+$cre_sol_Cookie_token = $creSolidaria['cre_sol_Cookie_token'] ?? null;
+$cre_sol_token = $creSolidaria['cre_sol_token'] ?? null;
+$cre_sol_fecha_token = $creSolidaria['cre_sol_fecha_token'] ?? null;
+
+
+// Lógica para BOLIVAR
+if ($aseguradoras['Bolivar']['C'] == "1") {
+  $creBolivar = obtenerCredenciales($enlace, 'Credenciales_Bolivar', '*', $_SESSION['intermediario']);
+
+} else {
+  $creBolivar = obtenerCredenciales($enlace, 'Credenciales_Bolivar', '*', '3');
+}
+$cre_bol_api_key = $creBolivar['cre_bol_api_key'] ?? null;
+$cre_bol_claveAsesor = $creBolivar['cre_bol_claveAsesor'] ?? null;
+
 
 
 if ($_SESSION["permisos"]["Cotizarpesados"] != "x") {
@@ -683,6 +750,8 @@ $rolAsesor = $_SESSION['permisos']['id_rol'];
 
         <!-- CAMPOS OCULTOS PARA OPTENER LA INFORMACION-->
         <div style="display: none;">
+          <label>Aseguradoras</label>
+          <input type="hidden" name="aseguradoras_pesados" id="aseguradoras_pesados" value='<?php echo json_encode($aseguradoras_pesados); ?>'>
           <label>Rol Asesor</label>
           <input type="hidden" name="rolAsesor" id="rolAsesorPesados" value="<?php echo $rolAsesor; ?>">
           <label>Clase</label>
@@ -781,4 +850,4 @@ $eliminarCotizacion->ctrEliminarCotizacion();
 ?>
 
 <!-- <script src="vistas/js/cotizar.js?v=<?php echo (rand()); ?>"></script> -->
-<script src="vistas/js/pesados.js?v=<?php echo (rand()); ?>"></script>
+ <script src="vistas/js/pesados.js?v=<?php echo (rand()); ?>"></script> 

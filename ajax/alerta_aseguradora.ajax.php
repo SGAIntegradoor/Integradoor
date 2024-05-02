@@ -12,7 +12,7 @@
             $resultado = ModeloAlertaAseguradora::mdlObtenerAlertas($cotizacion);   
             if (!$resultado) { return false; }
 
-            print_r(json_encode($resultado));
+            return json_encode($resultado);
         }
     }
 

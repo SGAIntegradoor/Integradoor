@@ -1,5 +1,5 @@
 <?php
-
+// phpinfo();
 if ($_SESSION["permisos"]["Clientes"] != "x") {
 
   echo '<script>
@@ -17,27 +17,27 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
 
 
 <style>
-          .btnAgregarCliente {
-            border-radius: 4px;
-            background-color: #88D600;
-            border: none;
-            color: #fff;
-            text-align: center;
-            font-size: 18px;
-            padding: 5px;
-            width: 200px;
-            transition: all 0.5s;
-            cursor: pointer;
-            margin: 5px;
-            /* box-shadow: 0 10px 20px -8px rgba(0, 0, 0,.7); */
-          }
+  .btnAgregarCliente {
+    border-radius: 4px;
+    background-color: #88D600;
+    border: none;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    padding: 5px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+    /* box-shadow: 0 10px 20px -8px rgba(0, 0, 0,.7); */
+  }
 
-          .btnAgregarCliente {
-            cursor: pointer;
-            display: inline-block;
-            position: relative;
-            transition: 0.5s;
-          }
+  .btnAgregarCliente {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
 
           .btnAgregarCliente:after {
             content: '»';
@@ -47,8 +47,7 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
             right: -30px;
             transition: 0.5s;
           }
-
-        </style>
+</style>
 
 <div class="content-wrapper">
 
@@ -76,25 +75,27 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
 
       <div class="box-header with-border">
 
-      <?php
-        
-      if ($_SESSION["permisos"]["Agregarunclientenuevo"] == "x") {
+        <?php
 
-        echo '<button class="btnAgregarCliente" data-toggle="modal" data-target="#modalAgregarCliente">
+        if ($_SESSION["permisos"]["Agregarunclientenuevo"] == "x") {
+
+          echo '<button class="btnAgregarCliente" data-toggle="modal" data-target="#modalAgregarCliente">
 
           Agregar cliente
 
         </button>';
-      }
-      ?>
+        }
+        ?>
 
       </div>
 
       <div class="box-body">
 
         <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
-
-          <thead>
+        <?php 
+     
+        ?>
+          <thead> 
 
             <tr>
 
@@ -118,16 +119,21 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
             <?php
 
 
-          if ($_SESSION["permisos"]["Verlistadodetodoslosclientesdelaagencia"] == "x") {
-            $item = null;
-            $valor = null;
-            $inter = null;
+            if ($_SESSION["permisos"]["Verlistadodetodoslosclientesdelaagencia"] == "x") {
+              $item = null;
+              $valor = null;
+              $inter = null;
+              $condition = 5000;
 
-            $clientes = ControladorClientes::ctrMostrarClientes($item, $valor, $inter);
+              $clientes = ControladorClientes::ctrMostrarClientes($item, $valor, $inter, $condition);
+              // var_dump($clientes);
+              // die();
 
-            foreach ($clientes as $key => $value) {
 
-              echo '<tr>
+
+              foreach ($clientes as $key => $value) {
+
+                echo '<tr>
 
                     <td>' . ($key + 1) . '</td>
 
@@ -139,8 +145,8 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
 
                     <td class="text-center">' . date('d/m/Y', strtotime($value['cli_fch_nacimiento'])) . '</td>';
 
-                    $genero = $value['cli_genero'] == 1 ? "M" : "F";
-                    echo '<td class="text-center">' . $genero . '</td>
+                $genero = $value['cli_genero'] == 1 ? "M" : "F";
+                echo '<td class="text-center">' . $genero . '</td>
 
                     <td class="text-center">' . $value["est_cvl_descripcion"] . '</td>
 
@@ -148,31 +154,31 @@ if ($_SESSION["permisos"]["Clientes"] != "x") {
 
                     <td>' . $value["cli_email"] . '</td>';
 
-              // if($value["cli_estado"] != 0){
-              //   echo '<td class="text-center"><button class="btn btn-success btn-xs btnActivarCliente" idCliente="'.$value["id_cliente"].'" estadoCliente="0">Activo</button></td>';
-              // }else{  
-              //   echo '<td class="text-center"><button class="btn btn-danger btn-xs btnActivarCliente" idCliente="'.$value["id_cliente"].'" estadoCliente="1">Inactivo</button></td>';
-              // }
+                // if($value["cli_estado"] != 0){
+                //   echo '<td class="text-center"><button class="btn btn-success btn-xs btnActivarCliente" idCliente="'.$value["id_cliente"].'" estadoCliente="0">Activo</button></td>';
+                // }else{  
+                //   echo '<td class="text-center"><button class="btn btn-danger btn-xs btnActivarCliente" idCliente="'.$value["id_cliente"].'" estadoCliente="1">Inactivo</button></td>';
+                // }
 
-              echo '<td class="text-center">
+                echo '<td class="text-center">
 
                       <div class="btn-group">';
-                      
-              if ($_SESSION["permisos"]["Editaruncliente"] == "x") {            
-                echo ' <button class="btn btn-primary btnEditarCliente" data-toggle="modal" data-target="#modalEditarCliente" idCliente="' . $value["id_cliente"] . '" style="float: none;"><i class="fa fa-pencil"></i></button>';
-              }
-              if ($_SESSION["permisos"]["Eliminarcliente"] == "x") {
 
-                echo '<button class="btn btn-danger btnEliminarCliente" idCliente="' . $value["id_cliente"] . '" style="float: none;"><i class="fa fa-times"></i></button>';
-              }
+                if ($_SESSION["permisos"]["Editaruncliente"] == "x") {
+                  echo ' <button class="btn btn-primary btnEditarCliente" data-toggle="modal" data-target="#modalEditarCliente" idCliente="' . $value["id_cliente"] . '" style="float: none;"><i class="fa fa-pencil"></i></button>';
+                }
+                // if ($_SESSION["permisos"]["Eliminarcliente"] == "x") {
 
-              echo '</div>
+                //   echo '<button class="btn btn-danger btnEliminarCliente" idCliente="' . $value["id_cliente"] . '" style="float: none;"><i class="fa fa-times"></i></button>';
+                // }
+
+                echo '</div>
 
                     </td>
 
                   </tr>';
+              }
             }
-          }
             ?>
 
           </tbody>
@@ -198,8 +204,8 @@ MODAL AGREGAR CLIENTE
     <div class="modal-content">
 
       <form role="form" method="post">
-          
-          
+
+
 
         <!--=====================================
         CABEZA DEL MODAL
@@ -245,7 +251,7 @@ MODAL AGREGAR CLIENTE
                     foreach ($tipoDocumento as $key => $value) {
 
                       echo '<option value="' . $value["id_tipo_documento"] . '">' . $value["tip_doc_descripcion"] . '</option>';
-
+                      
                     }
 
                     ?>
@@ -313,11 +319,11 @@ MODAL AGREGAR CLIENTE
                         for ($i = 1; $i <= 31; $i++) {
                           if (strlen($i) == 1) { ?>
                             <option value="<?php echo "0" . $i ?>"><?php echo "0" . $i ?></option><?php
-                          } else { ?>
+                                                                                                } else { ?>
                             <option value="<?php echo $i ?>"><?php echo $i ?></option><?php
-                          }
-                        }
-                        ?>
+                                                                                                }
+                                                                                              }
+                                                                                      ?>
 
                       </select>
 
@@ -364,8 +370,8 @@ MODAL AGREGAR CLIENTE
                         <?php
                         for ($j = 1920; $j <= 2021; $j++) { ?>
                           <option value="<?php echo $j ?>"><?php echo $j ?></option><?php
-                        }
-                        ?>
+                                                                                  }
+                                                                                    ?>
 
                       </select>
 
@@ -557,7 +563,6 @@ MODAL EDITAR CLIENTE
                     foreach ($tipoDocumento as $key => $value) {
 
                       echo '<option value="' . $value["id_tipo_documento"] . '">' . $value["tip_doc_descripcion"] . '</option>';
-
                     }
 
                     ?>
@@ -591,7 +596,7 @@ MODAL EDITAR CLIENTE
                   <input type="text" class="form-control input-lg" name="editarNombreCliente" id="editarNombreCliente" placeholder="Editar nombre" required>
                   <input type="hidden" id="idCliente" name="idCliente">
                   <input type="hidden" id="codCliente" name="codCliente">
-                  <input type="hidden" id="id_inter" name="id_inter" value="<?php echo $_SESSION["intermediario"];?>">
+                  <input type="hidden" id="id_inter" name="id_inter" value="<?php echo $_SESSION["intermediario"]; ?>">
 
                 </div>
 
@@ -628,11 +633,11 @@ MODAL EDITAR CLIENTE
                         for ($i = 1; $i <= 31; $i++) {
                           if (strlen($i) == 1) { ?>
                             <option value="<?php echo "0" . $i ?>"><?php echo "0" . $i ?></option><?php
-                          } else { ?>
+                                                                                                } else { ?>
                             <option value="<?php echo $i ?>"><?php echo $i ?></option><?php
-                          }
-                        }
-                        ?>
+                                                                                                }
+                                                                                              }
+                                                                                      ?>
 
                       </select>
 
@@ -679,8 +684,8 @@ MODAL EDITAR CLIENTE
                         <?php
                         for ($j = 1920; $j <= 2021; $j++) { ?>
                           <option value="<?php echo $j ?>"><?php echo $j ?></option><?php
-                        }
-                        ?>
+                                                                                  }
+                                                                                    ?>
 
                       </select>
 

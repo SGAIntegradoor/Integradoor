@@ -13,6 +13,9 @@ $valorPrima = str_replace('.', '', $_POST['valorPrima']);
 $seleccionar = $_POST['seleccionar'];
 
 
+
+
+
 $sql = "UPDATE `ofertas` SET `seleccionar` = '$seleccionar' WHERE `Placa` LIKE '$placa' AND `NumCotizOferta` LIKE '$numCotizOferta' 
 		AND `Aseguradora` LIKE '$aseguradora' AND `Producto` LIKE '$producto' AND `Prima` LIKE '$valorPrima' AND `id_cotizacion` = $idCotizacion";
 

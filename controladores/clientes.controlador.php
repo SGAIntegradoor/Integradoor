@@ -91,7 +91,7 @@ class ControladorClientes{
 	MOSTRAR CLIENTES
 	=============================================*/
 
-	static public function ctrMostrarClientes($item, $valor, $inter){
+	static public function ctrMostrarClientes($item, $valor, $inter, $condition = null){
 
 		$tabla = "clientes";
 		$tabla2 = "tipos_documentos";
@@ -99,7 +99,7 @@ class ControladorClientes{
 		$tabla4 = "cotizaciones";
 		$tabla5 = "usuarios";
 
-		$respuesta = ModeloClientes::mdlMostrarClientes($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $item, $valor, $inter);
+		$respuesta = ModeloClientes::mdlMostrarClientes($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $item, $valor, $inter, $condition);
 
 		return $respuesta;
 

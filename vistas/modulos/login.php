@@ -35,7 +35,7 @@
         </div>
       </div>
     </form>
-
+    
     <!-- VUE INSTANCE
     <div id="app" >
         <transition name="fade">

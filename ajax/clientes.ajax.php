@@ -39,7 +39,7 @@ class AjaxClientes{
 		
 		$inter = "";
 
-		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor, $inter);
+		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor, $inter, null);
 
 		echo json_encode($respuesta);
 
@@ -59,7 +59,7 @@ class AjaxClientes{
 		$valor = $this->validarDocumentoId;
 		$inter = $this->intermediario;
 
-		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor, $inter);
+		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor, $inter, null);
 
 		echo json_encode($respuesta);
 
@@ -76,7 +76,7 @@ class AjaxClientes{
 		$item = "buscarCliente";
         $valor = $this->buscarCliente;
 
-		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor);
+		$respuesta = ControladorClientes::ctrMostrarClientes($item, $valor, null, null);
 	
 		echo json_encode($respuesta);
 
@@ -160,5 +160,6 @@ if(isset($_POST["buscarCliente"])){
 // 	$cargarTipoDocId = new AjaxClientes();
 // 	$cargarTipoDocId -> tipoDocId = $_POST["tipoDocId"];
 // 	$cargarTipoDocId -> ajaxCargarTipoDocId();
+
 
 // }

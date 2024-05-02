@@ -1,5 +1,5 @@
 //Al cargar la pagina
- (()=>{
+(()=>{
     cargar_intermediarios();
     cargartipDoc()
  })()
@@ -138,7 +138,7 @@ $("#img_update").change(function(){
 
             data = JSON.parse(data);
             
-            contenido +=  ` <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
+            contenido +=  `<table class="table table-bordered table-striped dt-responsive tablas tablas-cotizaciones" width="100%">
 
             <thead>
   

@@ -1,12 +1,14 @@
 <?php
 
-class ControladorCotizaciones{
+class ControladorCotizaciones
+{
 
 	/*=============================================
 	MOSTRAR COTIZACIONES
 	=============================================*/
 
-	static public function ctrMostrarCotizaciones($item, $valor){
+	static public function ctrMostrarCotizaciones($item, $valor)
+	{
 
 		session_start();
 		$tabla = "cotizaciones";
@@ -15,37 +17,37 @@ class ControladorCotizaciones{
 		$tabla4 = "estados_civiles";
 		$tabla5 = "usuarios";
 		$tabla6 = "ciudadesbolivar";
-		
+
 
 		$respuesta = ModeloCotizaciones::mdlMostrarCotizaciones($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $tabla6, $item, $valor);
-				
-		return $respuesta;
 
+		return $respuesta;
 	}
 
 
 	/*=============================================
 	MOSTRAR COTIZACIONES "OFERTAS"
 	=============================================*/
-	
-	static public function ctrMostrarCotizaOfertas($item, $valor){
+
+	static public function ctrMostrarCotizaOfertas($item, $valor)
+	{
 
 		$tabla = "ofertas";
 
 		$respuesta = ModeloCotizaciones::ctrMostrarCotizaOfertas($tabla, $item, $valor);
 
 		return $respuesta;
-
-	}	
+	}
 
 
 	/*=============================================
 	ELIMINAR COTIZACIÓN
 	=============================================*/
 
-	static public function ctrEliminarCotizacion(){
+	static public function ctrEliminarCotizacion()
+	{
 
-		if(isset($_GET["idCotizacion"])){
+		if (isset($_GET["idCotizacion"])) {
 
 			$tabla = "cotizaciones";
 			$tabla2 = "ofertas";
@@ -53,9 +55,9 @@ class ControladorCotizaciones{
 
 			$respuesta = ModeloCotizaciones::mdlEliminarCotizaciones($tabla, $tabla2, $datos);
 
-			if($respuesta == "ok"){
+			if ($respuesta == "ok") {
 
-				echo'<script>
+				echo '<script>
 
 				swal({
 					  type: "success",
@@ -72,19 +74,17 @@ class ControladorCotizaciones{
 							})
 
 				</script>';
-
-			}		
-
+			}
 		}
-
 	}
-	
+
 
 	/*=============================================
 	RANGO FECHAS COTIZACIONES
-	=============================================*/	
+	=============================================*/
 
-	static public function ctrRangoFechasCotizaciones($fechaInicialCotizaciones, $fechaFinalCotizaciones){
+	static public function ctrRangoFechasCotizaciones($fechaFinalCotizaciones, $fechaInicialCotizaciones)
+	{
 
 		$tabla = "cotizaciones";
 		$tabla2 = "clientes";
@@ -93,11 +93,21 @@ class ControladorCotizaciones{
 		$tabla5 = "usuarios";
 		$tabla6 = "intermediario";
 
-		$respuesta = ModeloCotizaciones::mdlRangoFechasCotizaciones($tabla, $tabla2, $tabla3, $tabla4, $tabla5,$tabla6, $fechaInicialCotizaciones, $fechaFinalCotizaciones);
+		$respuesta = ModeloCotizaciones::mdlRangoFechasCotizaciones($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $tabla6, $fechaInicialCotizaciones, $fechaFinalCotizaciones);
 
 		return $respuesta;
-		
 	}
-	
 
+	static public function ctrGetDataLastRegisters($fechaInicialCotizaciones, $fechaFinalCotizaciones, $condicion)
+	{
+		if (isset($_GET["fechaInicialCotizaciones"]) && isset($_GET["fechaFinalCotizaciones"])) {
+			$respuesta = ModeloCotizaciones::mdlGetDataLastRegisters($fechaInicialCotizaciones, $fechaFinalCotizaciones, null);
+		} else if ($fechaFinalCotizaciones = null && $fechaInicialCotizaciones = null) {
+			$respuesta = ModeloCotizaciones::mdlGetDataLastRegisters(null, null, $condicion);
+		} else {
+			$respuesta = ModeloCotizaciones::mdlGetDataLastRegisters(null, null, null);
+		}
+
+		return $respuesta;
+	}
 }

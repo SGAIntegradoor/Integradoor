@@ -1,6 +1,7 @@
 <?php
+include_once "config/checkUser.php";
 
-$DB_host = "localhost";
+$DB_host = "52.15.158.65:3306";
 $DB_user = "grupoasi_cotizautos";
 $DB_pass = "M1graci0n123";
 $DB_name = "grupoasi_cotizautos";
@@ -16,24 +17,31 @@ if (!$enlace) {
   die("Conexion Fallida " . mysqli_connect_error());
 }
 
-error_reporting(E_ALL | ~E_WARNING);
+//error_reporting(E_ALL | ~E_WARNING);
 // mysqli_set_charset($enlace, "utf8");
 
-function obtenerCredenciales($enlace, $tabla, $columnas, $idIntermediario) {
+// echo '<script>console.log('.json_encode($_SESSION).')</script>';
+
+
+checkUserStatus();
+
+function obtenerCredenciales($enlace, $tabla, $columnas, $idIntermediario)
+{
   $query = "SELECT $columnas FROM `$tabla` WHERE `id_intermediario` = '$idIntermediario'";
   $ejecucion = mysqli_query($enlace, $query);
   $numerofilas = mysqli_num_rows($ejecucion);
   $fila = mysqli_fetch_assoc($ejecucion);
 
   if ($numerofilas > 0) {
-      return $fila;
+    return $fila;
   } else {
-      $query2 = "SELECT * FROM `$tabla` WHERE `id_intermediario` = 3";
-      $ejecucion2 = mysqli_query($enlace, $query2);
-      $fila2 = mysqli_fetch_assoc($ejecucion2);
-      return $fila2;
+    $query2 = "SELECT * FROM `$tabla` WHERE `id_intermediario` = 3";
+    $ejecucion2 = mysqli_query($enlace, $query2);
+    $fila2 = mysqli_fetch_assoc($ejecucion2);
+    return $fila2;
   }
 }
+
 
 // FUNCION PARA OBTENER CREDENCIALES SBS
 $creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS', 'cre_sbs_usuario, cre_sbs_contrasena', $_SESSION['intermediario']);
@@ -115,21 +123,52 @@ if ($numerofilas8 > 0) {
 
 if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
 
-    echo '<script>
+  echo '<script>
   
       window.location = "inicio";
-  
+
     </script>';
-  
-    return;
-  }
-  $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
+
+  return;
+}
+$idIntermediario = $_SESSION['permisos']['id_Intermediario'];
+$rolAsesor = $_SESSION['permisos']['idRol'];
+//var_dump($_SESSION);
 
 ?>
 
+<style>
+  .table-padding {
+    padding: 15px;
+    /* Puedes ajustar el valor según tus preferencias */
+  }
+
+  /* Agregar relleno general al contenedor padre */
+  .card-ofertas {
+    padding: 20px;
+    /* Puedes ajustar el valor según tus preferencias */
+  }
+
+  .thTable {
+    text-align: center;
+    /* Puedes ajustar el valor según tus preferencias */
+  }
+
+  /* Estilo para pantallas más pequeñas (menos de 495px) */
+  @media (max-width: 495px) {
+    .table-responsive {
+      overflow-x: auto;
+    }
+  }
+
+  .form-coti {
+    padding-top: 25px;
+  }
+</style>
+
 <body>
 
-  
+
   <div class="content-wrapper">
 
     <section class="content-header">
@@ -217,7 +256,8 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
                       <div class="col-xs-12 col-sm-6 col-md-3 form-group">
                         <input type="hidden" class="form-control" id="intermediario" value="<?php echo $_SESSION["intermediario"]; ?>">
                         <input type="hidden" class="form-control" id="cotRestanv" value="<?php echo $_SESSION["cotRestantes"]; ?>">
-                        <!-- <input type="hidden" class="form-control" id="cotRestanInter" value="<?php #echo $_SESSION["cotRestantesInter"]; ?>"> -->
+                        <!-- <input type="hidden" class="form-control" id="cotRestanInter" value="<?php #echo $_SESSION["cotRestantesInter"]; 
+                                                                                                  ?>"> -->
                         <label for="tipoDocumentoID">Tipo de Documento</label>
                         <select class="form-control" id="tipoDocumentoID" required>
                           <option value=""></option>
@@ -346,34 +386,34 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
             </form>
 
             <!-- FORMULARIO VEHICULO MANUAL -->
-            
-              <div id="formularioVehiculo">
-                <div class="col-lg-12" id="headerFormVeh">
-                  <div class="row row-formVehManual">
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                      <label for="">CONSULTA MANUAL DEL VEHICULO POR FASECOLDA</label>
-                    </div>
+
+            <div id="formularioVehiculo">
+              <div class="col-lg-12" id="headerFormVeh">
+                <div class="row row-formVehManual">
+                  <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label for="">CONSULTA MANUAL DEL VEHICULO POR FASECOLDA</label>
                   </div>
                 </div>
-                
-                <div class ="col-lg-12 form-consulVeh">
-                  <div class= "row">
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                          <label for="clase">Código Fasecolda</label>
-                          <input type="text" maxlength="10" class="form-control" id="fasecoldabuscadormanual" placeholder="Número de fasecolda">
-                      </div>
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                          <label for="clase">Modelo Vehículo</label>
-                          <input type="text" maxlength="10" class="form-control" id="modelobuscadormanual"  placeholder="Modelo Vehículo">
-                      </div>
-                      
-                      <div style="padding-top: 25px !important;" class="col-xs-12 col-sm-6 col-md-2 form-group">
-                          <button class="btn btn-primary btn-block" id="btnConsultarVehmanualbuscador">Consultar Vehículo</button>
-                      </div>
+              </div>
+
+              <div class="col-lg-12 form-consulVeh">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                    <label for="clase">Código Fasecolda</label>
+                    <input type="text" maxlength="10" class="form-control" id="fasecoldabuscadormanual" placeholder="Número de fasecolda">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                    <label for="clase">Modelo Vehículo</label>
+                    <input type="text" maxlength="10" class="form-control" id="modelobuscadormanual" placeholder="Modelo Vehículo">
+                  </div>
+
+                  <div style="padding-top: 25px !important;" class="col-xs-12 col-sm-6 col-md-2 form-group">
+                    <button class="btn btn-primary btn-block" id="btnConsultarVehmanualbuscador">Consultar Vehículo</button>
                   </div>
                 </div>
-                
-                  <form method="Post" id="formVehManual">
+              </div>
+
+              <form method="Post" id="formVehManual">
                 <div class="col-lg-12" id="headerFormVeh">
                   <div class="row row-formVehManual">
                     <div class="col-xs-12 col-sm-6 col-md-4">
@@ -381,12 +421,12 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="col-lg-12 form-consulVeh">
                   <div class="row">
-                      
-                      
-                  <div class="col-md-12">
+
+
+                    <div class="col-md-12">
                       <div class="row">
                         <div class="col-xs-12 col-sm-6 col-md-3 form-group">
                           <label for="clase">Clase Vehículo</label>
@@ -401,67 +441,67 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
                             <option value="PESADO">PESADO</option>
                             <option value="PICKUP">PICKUP</option>
                           </select>
-                      </div>
-                  
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-3 form-group">
                           <label for="Marca">Marca Vehículo</label>
                           <select class="form-control" name="Marca" id="Marca" required></select>
-                      </div>
-                      
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 col-md-3 form-group">
                           <label for="linea">Modelo Vehículo</label>
                           <div class="input-group">
-                              <div class="input-group-addon">
-                                  <div id="loadingModelo"></div>
-                              </div>
-                              <select class="form-control" name="edad" id="edad" required></select>
+                            <div class="input-group-addon">
+                              <div id="loadingModelo"></div>
+                            </div>
+                            <select class="form-control" name="edad" id="edad" required></select>
                           </div>
+                        </div>
+
+
+                        <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                          <label for="linea">Linea Vehículo</label>
+                          <select class="form-control" name="linea" id="linea" required></select>
+                        </div>
                       </div>
-
-
-                    <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                      <label for="linea">Linea Vehículo</label>
-                      <select class="form-control" name="linea" id="linea" required></select>
                     </div>
-                  </div>
-                  </div>
 
-                  
-                  
-                  <div class="col-xs-12 col-sm-6 col-md-12">
+
+
+                    <div class="col-xs-12 col-sm-6 col-md-12">
                       <div class="row">
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                        <div id="referenciados"></div>
-                      </div>
-                      <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                        <div id="referenciatres"></div>
-                      </div>
-                      <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                          <div id="referenciados"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                          <div id="referenciatres"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-3">
                           <div id="loaderVehiculo"></div>
+                        </div>
+
                       </div>
-                      
                     </div>
-                  </div>
-                  
-                  <div class="col-xs-12 col-sm-6 col-md-12">
+
+                    <div class="col-xs-12 col-sm-6 col-md-12">
                       <div class="row">
-                          <div class="col-xs-12 col-sm-6 col-md-2 form-group btnConsultarVeh">
-                              <button class="btn btn-primary btn-block" id="btnConsultarVeh">Consultar Vehículo</button>
-                          </div>
+                        <div class="col-xs-12 col-sm-6 col-md-2 form-group btnConsultarVeh">
+                          <button class="btn btn-primary btn-block" id="btnConsultarVeh">Consultar Vehículo</button>
+                        </div>
                       </div>
-                  </div>
-                  
-                  
-                  
+                    </div>
 
-                    
 
-                  
+
+
+
+
+
                   </div>
                 </div>
-                </form>
-              </div>
-            
+              </form>
+            </div>
+
 
             <!-- FORMULARIO RESUMEN VEHICULO TIPO MOTO-->
             <form method="Post" id="formResumVeh">
@@ -625,77 +665,139 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
                       </div>
                     </div>
 
-                  </div>
-                </div>
-              </div>
-
-              <div id="contenBtnCotizar">
-                <div class="col-lg-12 conten-cotizar">
-                  <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                      <button class="btn btn-primary btn-block" id="btnCotizarMotos">Cotizar Ofertas</button>
+                    <div id="contenBtnCotizar">
+                      <div class="col-lg-12 conten-cotizar">
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                            <button class="btn btn-primary btn-block" id="btnCotizarMotos">Cotizar Ofertas</button>
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-3 form-group">
+                            <div id="loaderOferta"></div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-3 form-group">
-                      <div id="loaderOferta"></div>
-                    </div>
                   </div>
-                </div>
-              </div>
             </form>
-
+            <!--- RESUMEN DE COTIZACIONES -->
             <div id="contenParrilla" style="display: none;">
               <div class="col-lg-12 form-parrilla">
                 <div class="row row-parrilla">
                   <div class="col-xs-12 col-sm-6 col-md-3">
-                    <label for="">PARRILLA DE COTIZACIÓNES</label>
+                    <label for="">RESUMEN DE COTIZACIONES</label>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3 text-right">
+                    <div id="masResOferta">
+                      <p id="masResumen" onclick="masRE();">Ver mas <i class="fa fa-plus-square-o"></i></p>
+                    </div>
+                    <div id="menosResOferta">
+                      <p id="menosResumen" onclick="menosRE();">Ver menos <i class="fa fa-minus-square-o"></i></p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div id="cardCotizacion">
-                <div class="col-lg-12">
-                  <div class="card-ofertas">
-                    <div class="row card-body">
-                      <div class="card-body col-sm-6 col-md-6">
-                        <div style="margin: 20px 25px;" class="exitosas">
-                          <p style="color: #88d600;"><b>Aseguradoras cotizadas</b></p>
-                        </div>
+
+                <!-- *//* Mostrar alertas *//* -->
+                <div id="resumenCotizaciones">
+                  <div class="col-lg-12">
+                    <div class="card-ofertas">
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-padding" id="tablaResumenCot">
+                          <thead>
+                            <tr>
+                              <th class="thTable" scope="col" style="color: #88d600; margin-right: 5px;">Aseguradora</th>
+                              <th class="thTable" scope="col" style="color: #88d600; margin-right: 5px;">Cotizo?</th>
+                              <th class="thTable" scope="col" style="color: #88d600;; margin-right: 5px;">Productos cotizados</th>
+                              <th class="thTable" scope="col" style="color: #88d600;; margin-right: 5px;">Observaciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <!-- 
+                             Fila 1 - Aseguradora Allianz -->
+                            <!-- <tr id="Allianz">
+                              <td id="Allianz">Allianz</td>
+                              <td class="text-center" id="AllianzResponse"></td>
+                              <td class="text-center" id="AllianzProducts"></td>
+                              <td id="AllianzObservation"></td>
+                            </tr> -->
+                            <!-- Fila 2 - Aseguradora Liberty -->
+                            <!-- <tr id="Liberty">
+                              <td id="Liberty">Liberty</td>
+                              <td class="text-center" id="LibertyResponse"></td>
+                              <td class="text-center" id="LibertyProducts"></td>
+                              <td id="LibertyObservation"></td>
+                            </tr> -->
+                            <!-- Fila 3 - Aseguradora SBS -->
+                            <!-- <tr id="SBS">
+                              <td id="SBS">SBS</td>
+                              <td class="text-center" id="SBSResponse"></td>
+                              <td class="text-center" id="SBSProducts"></td>
+                              <td id="SBSObservation"></td>
+                            </tr> -->
+                            <!-- <tr id="AXA">
+                              <td id="AXA">AXA</td>
+                              <td class="text-center" id="AXAResponse"></td>
+                              <td class="text-center" id="AXAProducts"></td>
+                              <td id="AXAObservation"></td>
+                            </tr> -->
+
+                          </tbody>
+                        </table>
                       </div>
-                      <div class="card-body col-sm-6 col-md-6">
-                        <div style="margin: 20px 25px;" class="fallidas">
-                          <p style="color: #88d600;"><b>Aseguradoras no cotizadas</b></p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row button-recotizar" style="display: none; margin:5px">
-                      <div class="col-md-6"></div>
+                      <div class="row button-recotizar" style="display: none; margin:5px">
+                        <div class="col-md-6"></div>
                         <div class="col-xs-12 col-sm-12 col-md-3 form-group">
                           <button class="btn btn-primary btn-block" id="btnReCotizarFallidas">Recotizar Ofertas Fallidas</button>
                         </div>
-                      <div class="col-md-3"></div>
+                        <div class="col-md-3"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div id="mensajeSga" class="col-lg-12">
+                        <p>
+                          <strong>Condiciones Generales:</strong><br>
+                          • Para motos con valores asegurados menores a $7 millones de pesos solo se presentan las condiciones que genere el cotizador web.<br>
+                          • El equipo del Canal Asesores Freelance solo cotiza manualmente motos con valores asegurados mayores a $7 millones.<br>
+                          • Valor asegurado máximo $50 millones. Motos por encima de ese valor, deben ser autorizadas por la Gerencia General.<br>
+                          • Motos con valor de prima total menor de $1 millón de pesos solo se permite pago de contado.<br><br>
+                          <strong>Condiciones de Financiación:</strong><br>
+                          • Se puede financiar motos con valor de prima total mayor a $1 millón de pesos.<br>
+                          • Se pueden financiar hasta en 11 cuotas, motos con beneficiarios onerosos de modelos de 2022 en adelante, después de que la prima con IVA supere $1 millón de pesos.<br>
+                          • Las cuotas máximas de financiación dependen del valor de prima total, de acuerdo a los siguientes rangos: entre $1 y $1,4 millones máx. 7 cuotas; mayor a 1,4 y menor a $2 millones máx 9 cuotas; y para motos con valor de prima total mayor a $2 millones se pueden financiar hasta en 11 cuotas.<br>
+                        </p>
+                      </div>
                     </div>
                   </div>
+
                 </div>
-                <div class="col-lg-12">
-                  <p>
-                    <strong>Condiciones Generales:</strong><br>
-                    • Para motos con valores asegurados menores a $7 millones de pesos solo se presentan las condiciones que genere el cotizador web.<br>
-                    • El equipo del Canal Asesores Freelance solo cotiza manualmente motos con valores asegurados mayores a $7 millones.<br>
-                    • Valor asegurado máximo $50 millones. Motos por encima de ese valor, deben ser autorizadas por la Gerencia General.<br>
-                    • Motos con valor de prima total menor de $1 millón de pesos solo se permite pago de contado.<br><br>
-                    <strong>Condiciones de Financiación:</strong><br>
-                    • Se puede financiar motos con valor de prima total mayor a $1 millón de pesos.<br>
-                    • Se pueden financiar hasta en 11 cuotas, motos con beneficiarios onerosos de modelos de 2022 en adelante, después de que la prima con IVA supere $1 millón de pesos.<br>
-                    • Las cuotas máximas de financiación dependen del valor de prima total, de acuerdo a los siguientes rangos: entre $1 y $1,4 millones máx. 7 cuotas; mayor a 1,4 y menor a $2 millones máx 9 cuotas; y para motos con valor de prima total mayor a $2 millones se pueden financiar hasta en 11 cuotas.<br> 
-                  </p>
+              </div>
+            </div>
+
+            <div id="parrillaCotizaciones" style="display: none;">
+              <div class="col-lg-12 form-coti">
+                <div class="row row-parrilla">
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <label for="">PARRILLA DE COTIZACIONES</label>
+                  </div>
                 </div>
-              </div>                                                                       
+              </div>
+
+              <div id="cardCotizacion">
+              </div>
+              <div id="cardAgregarCotizacion">
+              </div>
               <div id="contenCotizacionPDF" style="margin-top: 15px;">
               </div>
             </div>
           </div>
 
+
           <!-- CAMPOS OCULTOS PARA OPTENER LA INFORMACION-->
           <div style="display: none;">
+            <input type="hidden" name="aseguradoras_motos" id="aseguradoras_motos" value='<?php echo json_encode($aseguradoras_motos); ?>' />
             <label>Intermediario</label>
             <input type="hidden" name="idIntermediario" id="idIntermediario" value="<?php echo $idIntermediario; ?>">
             <label>Rol Asesor</label>
@@ -734,51 +836,56 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
             <input type="text" name="previsoraToken" id="previsoraToken">
 
             <!--ESTADO-->
-            <input type="text" class="form-control" id="cre_est_usuario" value="<?php echo $cre_est_usuario; ?>">
-            <input type="text" class="form-control" id="cre_equ_contrasena" value="<?php echo $cre_equ_contrasena; ?>">
-            <input type="text" class="form-control" id="Cre_Est_Entity_Id" value="<?php echo $Cre_Est_Entity_Id; ?>">
-            <input type="text" class="form-control" id="cre_est_zona" value="<?php echo $cre_est_zona; ?>">
+            <!-- <input type="text" class="form-control" id="cre_est_usuario" value="<?php #echo $cre_est_usuario; 
+                                                                                      ?>">
+            <input type="text" class="form-control" id="cre_equ_contrasena" value="<?php #echo $cre_equ_contrasena; 
+                                                                                    ?>">
+            <input type="text" class="form-control" id="Cre_Est_Entity_Id" value="<?php #echo $Cre_Est_Entity_Id; 
+                                                                                  ?>">
+            <input type="text" class="form-control" id="cre_est_zona" value="<?php #echo $cre_est_zona; 
+                                                                              ?>"> -->
 
 
             <!--ZURICH-->
-            <input type="text" class="form-control" id="cre_zur_nomUsu" value="<?php echo $_SESSION["cre_zur_nomUsu"]; ?>">
-            <input type="text" class="form-control" id="cre_zur_passwd" value="<?php echo $_SESSION["cre_zur_passwd"]; ?>">
-            <input type="text" class="form-control" id="cre_zur_intermediaryEmail" value="<?php echo $_SESSION["cre_zur_intermediaryEmail"]; ?>">
-            <input type="text" class="form-control" id="cre_zur_Cookie" value="<?php echo $_SESSION["cre_zur_Cookie"]; ?>">
-            <input type="text" class="form-control" id="cre_zur_token" value="<?php echo $_SESSION["cre_zur_token"]; ?>">
-            <input type="text" class="form-control" id="cre_zur_fecha_token" value="<?php echo $_SESSION["cre_zur_fecha_token"]; ?>">
+            <!-- <input type="text" class="form-control" id="cre_zur_nomUsu" value="<?php #echo $_SESSION["cre_zur_nomUsu"]; 
+                                                                                    ?>">
+            <input type="text" class="form-control" id="cre_zur_passwd" value="<?php #echo $_SESSION["cre_zur_passwd"]; 
+                                                                                ?>">
+            <input type="text" class="form-control" id="cre_zur_intermediaryEmail" value="<?php #echo $_SESSION["cre_zur_intermediaryEmail"]; 
+                                                                                          ?>">
+            <input type="text" class="form-control" id="cre_zur_Cookie" value="<?php #echo $_SESSION["cre_zur_Cookie"]; 
+                                                                                ?>">
+            <input type="text" class="form-control" id="cre_zur_token" value="<?php #echo $_SESSION["cre_zur_token"]; 
+                                                                              ?>">
+            <input type="text" class="form-control" id="cre_zur_fecha_token" value="<?php #echo $_SESSION["cre_zur_fecha_token"]; 
+                                                                                    ?>"> -->
 
             <!--SOLIDARIA-->
-            <input type="text" class="form-control" id="cre_sol_cod_sucursal" value="<?php echo $cre_sol_cod_sucursal; ?>">
-            <input type="text" class="form-control" id="cre_sol_cod_per" value="<?php echo $cre_sol_cod_per; ?>">
-            <input type="text" class="form-control" id="cre_sol_cod_tipo_agente" value="<?php echo $cre_sol_cod_tipo_agente; ?>">
-            <input type="text" class="form-control" id="cre_sol_cod_agente" value="<?php echo $cre_sol_cod_agente; ?>">
-            <input type="text" class="form-control" id="cre_sol_cod_pto_vta" value="<?php echo $cre_sol_cod_pto_vta; ?>">
-            <input type="text" class="form-control" id="cre_sol_grant_type" value="<?php echo $cre_sol_grant_type; ?>">
-            <input type="text" class="form-control" id="cre_sol_Cookie_token" value="<?php echo $cre_sol_Cookie_token; ?>">
-            <input type="text" class="form-control" id="cre_sol_token" value="<?php echo $cre_sol_token; ?>">
-            <input type="text" class="form-control" id="cre_sol_fecha_token" value="<?php echo $cre_sol_fecha_token; ?>">
+            <!-- <input type="text" class="form-control" id="cre_sol_cod_sucursal" value="<# ?php echo $cre_sol_cod_sucursal; ?>">
+            <input type="text" class="form-control" id="cre_sol_cod_per" value="<#?php echo $cre_sol_cod_per; ?>">
+            <input type="text" class="form-control" id="cre_sol_cod_tipo_agente" value="<#?php echo $cre_sol_cod_tipo_agente; ?>">
+            <input type="text" class="form-control" id="cre_sol_cod_agente" value="<#?php echo $cre_sol_cod_agente; ?>">
+            <input type="text" class="form-control" id="cre_sol_cod_pto_vta" value="<#?php echo $cre_sol_cod_pto_vta; ?>">
+            <input type="text" class="form-control" id="cre_sol_grant_type" value="<#?php echo $cre_sol_grant_type; ?>">
+            <input type="text" class="form-control" id="cre_sol_Cookie_token" value="<#?php echo $cre_sol_Cookie_token; ?>">
+            <input type="text" class="form-control" id="cre_sol_token" value="<#?php echo $cre_sol_token; ?>">
+            <input type="text" class="form-control" id="cre_sol_fecha_token" value="<#?php echo $cre_sol_fecha_token; ?>"> -->
 
             <!--PREVISORA-->
-            <input type="text" class="form-control" id="cre_pre_AgentCodeListCoin" value="<?php echo $_SESSION["cre_pre_AgentCodeListCoin"]; ?>">
-            <input type="text" class="form-control" id="cre_pre_AgentAgencyTypeCode" value="<?php echo $_SESSION["cre_pre_AgentAgencyTypeCode"]; ?>">
-            <input type="text" class="form-control" id="cre_pre_ParticipationCia" value="<?php echo $_SESSION["cre_pre_ParticipationCia"]; ?>">
-            <input type="text" class="form-control" id="cre_pre_AgentCode" value="<?php echo $_SESSION["cre_pre_AgentCode"]; ?>">
-            <input type="text" class="form-control" id="cre_pre_Username" value="<?php echo $_SESSION["cre_pre_Username"]; ?>">
-            <input type="text" class="form-control" id="cre_pre_Password" value="<?php echo $_SESSION["cre_pre_Password"]; ?>">
+            <!-- <input type="text" class="form-control" id="cre_pre_AgentCodeListCoin" value="<#?php echo $_SESSION["cre_pre_AgentCodeListCoin"]; ?>">
+            <input type="text" class="form-control" id="cre_pre_AgentAgencyTypeCode" value="<#?php echo $_SESSION["cre_pre_AgentAgencyTypeCode"]; ?>">
+            <input type="text" class="form-control" id="cre_pre_ParticipationCia" value="<#?php echo $_SESSION["cre_pre_ParticipationCia"]; ?>">
+            <input type="text" class="form-control" id="cre_pre_AgentCode" value="<#?php echo $_SESSION["cre_pre_AgentCode"]; ?>">
+            <input type="text" class="form-control" id="cre_pre_Username" value="<#?php echo $_SESSION["cre_pre_Username"]; ?>">
+            <input type="text" class="form-control" id="cre_pre_Password" value="<#?php echo $_SESSION["cre_pre_Password"]; ?>"> -->
 
             <!--MAPFRE-->
-            <input type="text" class="form-control" id="cre_map_codCliente" value="<?php echo $_SESSION["cre_map_codCliente"]; ?>">
-            <input type="text" class="form-control" id="cre_map_codigoOficinaAsociado" value="<?php echo $_SESSION["cre_map_codigoOficinaAsociado"]; ?>">
-            <input type="text" class="form-control" id="cre_map_codigoIntermediario" value="<?php echo $_SESSION["cre_map_codigoIntermediario"]; ?>">
-            <input type="text" class="form-control" id="cre_map_username" value="<?php echo $_SESSION["cre_map_username"]; ?>">
-            <input type="text" class="form-control" id="cre_map_password" value="<?php echo $_SESSION["cre_map_password"]; ?>">
-            <input type="text" class="form-control" id="cre_map_codigonivel3GA" value="<?php echo $_SESSION["cre_map_codigonivel3GA"]; ?>">
-
-
-            <!--SBS-->
-            <input type="text" class="form-control" id="cre_sbs_usuario" value="<?php echo $cre_sbs_usuario; ?>">
-            <input type="text" class="form-control" id="cre_sbs_contrasena" value="<?php echo $cre_sbs_contrasena; ?>">
+            <!-- <input type="text" class="form-control" id="cre_map_codCliente" value="<#?php echo $_SESSION["cre_map_codCliente"]; ?>">
+            <input type="text" class="form-control" id="cre_map_codigoOficinaAsociado" value="<#?php echo $_SESSION["cre_map_codigoOficinaAsociado"]; ?>">
+            <input type="text" class="form-control" id="cre_map_codigoIntermediario" value="<#?php echo $_SESSION["cre_map_codigoIntermediario"]; ?>">
+            <input type="text" class="form-control" id="cre_map_username" value="<#?php echo $_SESSION["cre_map_username"]; ?>">
+            <input type="text" class="form-control" id="cre_map_password" value="<#?php echo $_SESSION["cre_map_password"]; ?>">
+            <input type="text" class="form-control" id="cre_map_codigonivel3GA" value="<#?php echo $_SESSION["cre_map_codigonivel3GA"]; ?>"> -->
 
             <!--ALLIANZ-->
             <input type="text" class="form-control" id="cre_alli_sslcertfile" value="<?php echo $cre_alli_sslcertfile; ?>">
@@ -788,6 +895,11 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
             <input type="text" class="form-control" id="cre_alli_agentid" value="<?php echo $cre_alli_agentid; ?>">
             <input type="text" class="form-control" id="cre_alli_partnercode" value="<?php echo $cre_alli_partnercode; ?>">
             <input type="text" class="form-control" id="cre_alli_agentcode" value="<?php echo $cre_alli_agentcode; ?>">
+
+            <!--SBS-->
+            <input type="text" class="form-control" id="cre_sbs_usuario" value="<?php echo $cre_sbs_usuario; ?>">
+            <input type="text" class="form-control" id="cre_sbs_contrasena" value="<?php echo $cre_sbs_contrasena; ?>">
+
 
             <!--AXA-->
             <input type="text" class="form-control" id="cre_axa_sslcertfile" value="<?php echo $cre_axa_sslcertfile; ?>">
@@ -801,8 +913,8 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
             <input type="text" class="form-control" id="url_axa" value="<?php echo $url_axa; ?>">
 
             <!--Bolivar-->
-            <input type="text" class="form-control" id="cre_bol_api_key" value="<?php echo $cre_bol_api_key; ?>">
-            <input type="text" class="form-control" id="cre_bol_claveAsesor" value="<?php echo $cre_bol_claveAsesor; ?>">
+            <!-- <input type="text" class="form-control" id="cre_bol_api_key" value="<?php echo $cre_bol_api_key; ?>">
+            <input type="text" class="form-control" id="cre_bol_claveAsesor" value="<?php echo $cre_bol_claveAsesor; ?>"> -->
 
           </div>
 
@@ -851,5 +963,3 @@ if ($_SESSION["permisos"]["Cotizarmotos"] != "x") {
 
 <script src="vistas/js/motos.js?v=<?php echo (rand()); ?>"></script>
 <script src="vistas/js/pesados.js?v=<?php echo (rand()); ?>"></script>
-
-

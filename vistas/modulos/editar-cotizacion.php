@@ -1,5 +1,6 @@
 <?php
 
+require_once "config/retrieveQuotation.php";
 // if ($_SESSION["rol"] != 1 && $_SESSION["rol"] != 2) {
 
 //   echo '<script>
@@ -10,13 +11,16 @@
 
 //   return;
 // }
-
 $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
 
-
+echo '<script>console.log(' . json_encode($_SESSION) . ')</script>';
+$id_Cotizacion = $_GET['idCotizacion'];
+$response = retrieveQuotation($id_Cotizacion);
+echo json_encode($response);
 ?>
+
 <head>
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 </head>
 <style>
   .botones-agregar-manual {
@@ -28,25 +32,27 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
   }
 
   .table-padding {
-  padding: 25px; /* Puedes ajustar el valor según tus preferencias */
+    padding: 25px;
+    /* Puedes ajustar el valor según tus preferencias */
   }
 
   /* Agregar relleno general al contenedor padre */
   .card-ofertas {
-    padding: 20px; /* Puedes ajustar el valor según tus preferencias */
+    padding: 20px;
+    /* Puedes ajustar el valor según tus preferencias */
   }
 
   .thTable {
-    text-align: center; /* Puedes ajustar el valor según tus preferencias */
+    text-align: center;
+    /* Puedes ajustar el valor según tus preferencias */
   }
 
-    /* Estilo para pantallas más pequeñas (menos de 495px) */
+  /* Estilo para pantallas más pequeñas (menos de 495px) */
   @media (max-width: 495px) {
     .table-responsive {
       overflow-x: auto;
     }
   }
-
 </style>
 
 <div class="content-wrapper">
@@ -60,7 +66,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
 
 
     ?>
-<input type="hidden" id="idofertaguardarmanual" value="<?php echo  $idCotizacion; ?>">
+    <input type="hidden" id="idofertaguardarmanual" value="<?php echo  $idCotizacion; ?>">
     <h1>
 
       Cotización # <?php echo $idCotizacion ?>
@@ -437,7 +443,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                       <label for="txtMarcaVeh">Marca</label>
                       <input type="text" class="form-control classMarcaVeh" id="txtMarcaVehPesado" placeholder="" disabled>
                     </div>
-                    
+
                   </div>
 
                   <div class="row">
@@ -474,7 +480,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                   </div>
 
                   <div class="row">
-                    
+
 
                     <div class="col-xs-12 col-sm-6 col-md-3 form-group">
                       <label for="DptoCirculacion">Departamento de Circulación</label>
@@ -863,22 +869,22 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
               <div class="col-xs-12 col-sm-6 col-md-3">
                 <label for="">RESUMEN DE COTIZACIONES</label>
               </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
+              <div class="col-xs-12 col-sm-6 col-md-3">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-3">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-3 text-right">
+                <div id="masResOferta">
+                  <p id="masResumen" onclick="masRE();">Ver mas <i class="fa fa-plus-square-o"></i></p>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
+                <div id="menosResOferta">
+                  <p id="menosResumen" onclick="menosRE();">Ver menos <i class="fa fa-minus-square-o"></i></p>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-3 text-right">
-                  <div id="masResOferta">
-                    <p id="masResumen" onclick="masRE();">Ver mas <i class="fa fa-plus-square-o"></i></p>
-                  </div>
-                  <div id="menosResOferta">
-                    <p id="menosResumen" onclick="menosRE();">Ver menos <i class="fa fa-minus-square-o"></i></p>
-                  </div>
-                </div>
+              </div>
             </div>
           </div>
 
-            <!-- Mostrar alertas -->
+          <!-- Mostrar alertas -->
           <div id="resumenCotizaciones">
             <div class="col-lg-12" style="display: block;">
               <div class="card-ofertas">
@@ -898,37 +904,76 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                   </table>
                 </div>
               </div>
-            </div>
-          </div>
+              <?php if ($response['cot_clase'] == "AUTOMOVIL" || $response['cot_clase'] == "AUTOMOVILES") { ?>
+                <div>
+                  <p class="text-justify"><strong>¿Por qué algunas compañías no cotizan? R/. 0.</strong>Tiene póliza vigente con esa compañía. <strong>1.</strong> Aseguradora
+                    caída, en mantenimiento o en actualización. <strong>2.</strong> RUNT, Cexper, Sistema Fasecolda caído. <strong>3.</strong> Fallas Portal
+                    Integradoor. <strong>4.</strong> Vehículo fuera de políticas por marca, línea o modelo. <strong>5.</strong> Ciudad bloqueada. <strong>6.</strong> Error en
+                    validación datos del asegurado. <strong>7.</strong> Valor asegurado no autorizado para cotizar vía webservice. <strong>8.</strong> Vehículo
+                    salvamento. <strong>9.</strong> Motos, Pesados, Públicos no se cotizan por este módulo. <strong>10.</strong> Personas Jurídicas se cotizan
+                    manualmente. <strong>11.</strong> Algunas aseguradoras no cotizan 0 km vía webservice. <strong>12.</strong> Vehículo bloqueado por cotización
+                    vigente con otro asesor (ej. Solidaria). <strong>13.</strong> Mal uso del usuario registrando espacios o caracteres en placas,
+                    nombres, apellidos o documentos de identidad
+                  </p>
+                </div>
+                <div class="aviso-container col-lg-12">
+                  <p style="font-weight: bold;">
+                    NOTA: Si a tu cliente le interesa Previsora, ten en cuenta que ciertas líneas de vehículos requieren la instalación del dispositivo Cazador al tomar su seguro y este tiene un costo adicional a la póliza. Por favor confirma con tu área comercial.
+                  </p>
+                </div>
+              <?php } else if ($response['cot_clase'] == "MOTOCICLETA") { ?>
+                <div class="col-lg-12">
+                  <p>
+                    <strong>Condiciones Generales:</strong><br>
+                    • Para motos con valores asegurados menores a $7 millones de pesos solo se presentan las condiciones que genere el cotizador web.<br>
+                    • El equipo del Canal Asesores Freelance solo cotiza manualmente motos con valores asegurados mayores a $7 millones.<br>
+                    • Valor asegurado máximo $50 millones. Motos por encima de ese valor, deben ser autorizadas por la Gerencia General.<br>
+                    • Motos con valor de prima total menor de $1 millón de pesos solo se permite pago de contado.<br><br>
+                    <strong>Condiciones de Financiación:</strong><br>
+                    • Se puede financiar motos con valor de prima total mayor a $1 millón de pesos.<br>
+                    • Se pueden financiar hasta en 11 cuotas, motos con beneficiarios onerosos de modelos de 2022 en adelante, después de que la prima con IVA supere $1 millón de pesos.<br>
+                    • Las cuotas máximas de financiación dependen del valor de prima total, de acuerdo a los siguientes rangos: entre $1 y $1,4 millones máx. 7 cuotas; mayor a 1,4 y menor a $2 millones máx 9 cuotas; y para motos con valor de prima total mayor a $2 millones se pueden financiar hasta en 11 cuotas.<br>
+                  </p>
+                </div>
+              <?php } else if ($response['cot_clase'] == "CARROTANQUE" || $response['cot_clase'] == "REMOLQUE" || 
+                    $response['cot_clase'] == "VOLQUETA" || $response['cot_clase'] == "FURGONETA" || $response['cot_clase'] == "GRUA"
+                    || $response['cot_clase'] == "REMOLCADOR" || $response['cot_clase'] == "FURGON" || $response['cot_clase'] == "CHASIS"
+                    || $response['cot_clase'] == "BUS" || $response['cot_clase'] == "CAMION") { ?>
+                    <div></div>
+              <?php } ?>
 
-          <div class="col-lg-12 form-parrilla">
-            <div class="row row-parrilla">
-              <div class="col-xs-12 col-sm-6 col-md-3">
-                <label for="">PARRILLA DE COTIZACIONES</label>
+            </div>
+
+            <div class="col-lg-12 form-parrilla">
+              <div class="row row-parrilla">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <label for="">PARRILLA DE COTIZACIONES</label>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div id="cardCotizacion">
-          </div>
+            <div id="cardCotizacion">
+            </div>
 
-          <div id="cardAgregarCotizacion">
-          </div>
+            <div id="cardAgregarCotizacion">
+            </div>
 
-          <div id="contenCotizacionPDF">
+            <div id="contenCotizacionPDF">
 
-            <div class="col-xs-12" style="width: 100%;">
-              <div class="row align-items-center">
-                <div class="col-xs-4">
-                  <label for="checkboxAsesorEditar">¿Deseas agregar tus datos como asesor en la cotización?</label>
-                  <input class="form-check-input" type="checkbox" id="checkboxAsesorEditar" style="margin-left: 10px;" checked>
-                </div>
-                <div class="col-xs-4">
-                  <button type="button" class="btn btn-danger" id="btnParrillaPDF">
-                    <span class="fa fa-file-text"></span> Generar PDF de Cotización
-                  </button>
+              <div class="col-xs-12" style="width: 100%;">
+                <div class="row align-items-center">
+                  <div class="col-xs-4">
+                    <label for="checkboxAsesorEditar">¿Deseas agregar tus datos como asesor en la cotización?</label>
+                    <input class="form-check-input" type="checkbox" id="checkboxAsesorEditar" style="margin-left: 10px;" checked>
+                  </div>
+                  <div class="col-xs-4">
+                    <button type="button" class="btn btn-danger" id="btnParrillaPDF">
+                      <span class="fa fa-file-text"></span> Generar PDF de Cotización
+                    </button>
+                  </div>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -936,8 +981,6 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
         </div>
 
       </div>
-
-    </div>
 
   </section>
 

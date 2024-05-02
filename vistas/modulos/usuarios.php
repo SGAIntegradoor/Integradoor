@@ -13,6 +13,26 @@
 
 ?>
 
+<!-- <style>
+    .btn-excel {
+    display: flex !important;
+    background-color: #87d501 !important;
+    height: 32px;
+    align-items: center;
+  }
+
+  .dt-search {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .paging_full_numbers{
+    display: flex !important;
+    justify-content: flex-end;
+  } -->
+</style>
+
 <div class="content-wrapper">
 
   <section class="content-header">
@@ -85,7 +105,7 @@
 
       <div class="box-body">
 
-        <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
+        <table class="table table-bordered table-striped dt-responsive tablas-cotizaciones tablas"  width="100%">
 
           <thead>
 
@@ -96,12 +116,12 @@
               <th>N°_Identidad</th>
               <th>Nombre</th>
               <th>Telefono</th>
-              <th>Correo Electronico</th>
+              <th style="width: 50px;">Correo Electronico</th>
               <th>Rol</th>
               <th>Últ_login</th>
               <th>Foto</th>
               <th>Estado</th>
-              <th>Acciones</th>
+              <th style="width: 110px;">Acciones</th>
 
             </tr>
 

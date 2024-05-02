@@ -215,7 +215,10 @@ if ($_SESSION["permisos"]["AyudaVentasFreelance"] == "x") {
             
                 <div style="margin-left: 1em; padding-bottom: 1em;">
                     <p>* PN: Persona Natural. PJ: Persona Jurídica</p>
+                <div style="display: flex; flex-direction: row;">
                 
+                    <p>Sarlaft Superintendencia Financiera</p>
+                </div>
                     <b>Sarlaft general PN:</b>
                     <button 
                     class="btn btn-primary" 
