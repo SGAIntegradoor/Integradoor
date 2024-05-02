@@ -4,6 +4,6 @@ session_destroy();
 
 echo '<script>
 
-	window.location = "localhost/integradoorTest/app";
+	window.location = "/qas";
 
 </script>';
