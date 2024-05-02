@@ -1,21 +1,10 @@
 <?php
 
 
+require_once "config/dbconfig.php";
+
 $mensaje = $_POST['saludo'];
 
-$DB_host = "localhost";
-$DB_user = "root";
-$DB_pass = "";
-$DB_name = "grupoasi_cotizautos";
-
-
-$enlace = mysqli_connect("$DB_host", "$DB_user", "$DB_pass", "$DB_name");
-
-if(!$enlace ){
-
-    die("Conexion Fallida ".mysqli_connect_error());
-
-}
 $idRol = $_POST['idRol'];
 
 if($idRol == 1 || $idRol == 10){
