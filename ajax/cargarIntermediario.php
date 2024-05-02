@@ -1,16 +1,7 @@
 <?php
 session_start();
 
-$DB_host = "localhost";
-$DB_user = "root";
-$DB_pass = "";
-$DB_name = "grupoasi_cotizautos";
-$enlace = mysqli_connect("$DB_host", "$DB_user", "$DB_pass", "$DB_name");
-
-if(!$enlace ){
-    die("Conexion Fallida ".mysqli_connect_error());
-}
-
+require_once "config/dbconfig.php";
 
 if($_SESSION["rol"] == 18 ||$_SESSION["rol"] == 10 ||$_SESSION["rol"] == 1){
     $query = "SELECT * FROM intermediario";
