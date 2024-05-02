@@ -1,3 +1,7 @@
+$.ajaxSetup({
+  baseUrl: '/qas'
+});
+
 $(document).ready(function () {
   var permisos = JSON.parse(permisosPlantilla);
 
