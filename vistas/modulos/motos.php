@@ -1,15 +1,7 @@
 <?php
 include_once "config/checkUser.php";
 
-$DB_host = "52.15.158.65:3306";
-$DB_user = "grupoasi_cotizautos";
-$DB_pass = "M1graci0n123";
-$DB_name = "grupoasi_cotizautos";
-
-// $DB_host = "localhost";
-// $DB_user = "root";
-// $DB_pass = "";
-// $DB_name = "grupoasi_cotizautos";
+require_once "config/dbconfig.php";
 
 $enlace = mysqli_connect("$DB_host", "$DB_user", "$DB_pass", "$DB_name");
 if (!$enlace) {
