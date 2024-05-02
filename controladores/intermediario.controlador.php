@@ -5,6 +5,12 @@ mb_internal_encoding("UTF-8");
 require_once("../modelos/intermediario.modelo.php");
 
 
+
+
+
+
+
+
 Switch ($_GET['function']){
     //funcion para cargar la informacion del intermediario
     case "traerCrede":

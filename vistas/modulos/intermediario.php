@@ -1,3 +1,4 @@
+<script src="vistas/js/intermediarioMenu.js"></script>
 <?php
 
 if ($_SESSION["permisos"]["Agregarintermediario"] != "x") {
@@ -11,6 +12,8 @@ if ($_SESSION["permisos"]["Agregarintermediario"] != "x") {
     return;
   }
 ?>
+
+<!--<script src="vistas/js/intermediarioMenu.js"></script>-->
 
 <style>
   input[type="checkbox"] {

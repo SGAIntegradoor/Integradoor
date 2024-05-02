@@ -1,4 +1,6 @@
 <?php
+session_start();
+$intermediario = $_SESSION['intermediario'];
 
 header('Content-Type: text/html; charset=utf-8');
 date_default_timezone_set('America/Bogota');
@@ -26,10 +28,19 @@ $conexion->set_charset("utf8");
 $query2 = "SELECT *	FROM cotizaciones, clientes WHERE cotizaciones.id_cliente = clientes.id_cliente AND `id_cotizacion` = $identificador";
 $valor2 = $conexion->query($query2);
 $fila = mysqli_fetch_array($valor2);
-
 $query3 = "SELECT DISTINCT Aseguradora FROM ofertas WHERE `id_cotizacion` = $identificador";
 $valor3 = $conexion->query($query3);
 $fila2 = mysqli_num_rows($valor3);
+
+
+// :::::::::::::::::::::::Query para imagen logo::::::::::::::::::::::::::.
+$queryLogo = "SELECT urlLogo FROM intermediario  WHERE id_Intermediario = $intermediario";
+
+$valorLogo = $conexion->query($queryLogo);
+$valorLogo = mysqli_fetch_array($valorLogo);
+$valorLogo = $valorLogo['urlLogo'];
+
+$porciones = explode(".", $valorLogo);
 
 // Consulta las aseguradoras que fueron selecionadas para visualizar en el PDF
 $queryAsegSelec = "SELECT DISTINCT Aseguradora FROM ofertas WHERE `id_cotizacion` = $identificador AND `seleccionar` = 'Si'";
@@ -37,9 +48,14 @@ $valorAsegSelec = $conexion->query($queryAsegSelec);
 $asegSelecionada = mysqli_num_rows($valorAsegSelec);
 
 // Consultar cuantas Ofertas fueron selecionadas para visualizarlas en el PDF
-$queryPDF = "SELECT pdf FROM ofertas WHERE `id_cotizacion` = $identificador AND `seleccionar` = 'Si'";
+$queryPDF = "SELECT UrlPdf FROM ofertas WHERE `id_cotizacion` = $identificador AND `seleccionar` = 'Si'";
 $valorPDF = $conexion->query($queryPDF);
-$ofertasPDF = mysqli_num_rows($valorPDF);
+if (!$valorPDF) {
+    echo "Error en la consulta: " . $conexion->error;
+} else {
+    $ofertasPDF = mysqli_num_rows($valorPDF);
+}
+// $ofertasPDF = mysqli_num_rows($valorPDF);
 
 
 $fechaCotiz = substr($fila['cot_fch_cotizacion'], 0, -9);
@@ -99,19 +115,19 @@ if ($ocultarAsesor) {
 }
 
 
-$fecha = $fila["f_registro"];
-$newDate = date("d/m/Y", strtotime($fecha));
+// $fecha = $fila["f_registro"];
+// $newDate = date("d/m/Y", strtotime($fecha));
 $real = "";
 
-if ($consecutivo >= 0 && $consecutivo <= 9) {
-	$real = "MJN715" . $consecutivo;
-} else if ($consecutivo >= 10 && $consecutivo <= 99) {
-	$real = "0000" . $consecutivo;
-} else if ($consecutivo >= 100 && $consecutivo <= 999) {
-	$real = "000" . $consecutivo;
-} else if ($consecutivo >= 1000 && $consecutivo <= 9999) {
-	$real = "00" . $consecutivo;
-}
+// if ($consecutivo >= 0 && $consecutivo <= 9) {
+// 	$real = "MJN715" . $consecutivo;
+// } else if ($consecutivo >= 10 && $consecutivo <= 99) {
+// 	$real = "0000" . $consecutivo;
+// } else if ($consecutivo >= 100 && $consecutivo <= 999) {
+// 	$real = "000" . $consecutivo;
+// } else if ($consecutivo >= 1000 && $consecutivo <= 9999) {
+// 	$real = "00" . $consecutivo;
+// }
 
 
 
@@ -159,7 +175,13 @@ $pdf->AddPage();
 
 $pdf->Image('../../../vistas/img/logos/imagencotizador2.jpg', -5, 0, 0, 92, 'JPG', '', '', true, 200, '', false, false, 0, false, false, false);
 
-$pdf->Image('../../../vistas/img/logosIntermediario/LogoGA.png', 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
+if ($porciones[1] == 'png') {
+
+	$pdf->Image('../../../vistas/img/logosIntermediario/' . $valorLogo, 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
+} else {
+	$pdf->Image('../../../vistas/img/logosIntermediario/' . $valorLogo, 8, 13, 0, 20, 'JPG', '', '', true, 160, '', false, false, 0, false, false, false);
+}
+// $pdf->Image('../../../vistas/img/logosIntermediario/LogoGA.png', 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
 
 $pdf->Image('../../../vistas/img/logos/cheque.png', 100.5, 180.5, 0, -12, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
 
@@ -1216,11 +1238,18 @@ while ($rowRespuesta12 = mysqli_fetch_assoc($respuestaquery12)) {
 
 	$nombreAseguradora = nombreAseguradora($rowRespuesta12['Aseguradora']);
 	$nombreProducto = productoAseguradora($rowRespuesta12['Aseguradora'], $rowRespuesta12['Producto']);
+    if (($rowRespuesta12['PerdidaParcialHurto'] == null) || ($rowRespuesta12['PerdidaParcialHurto'] == "")) {
+                $perdidadeParcialhurto = $rowRespuesta12['PerdidaParcial'];
+
+    } else {
+                $perdidadeParcialhurto = ($rowRespuesta12['PerdidaParcial'] == $rowRespuesta12['PerdidaParcialHurto']) ? $rowRespuesta12['PerdidaParcial'] : $rowRespuesta12['PerdidaParcialHurto'];
+    }
+
 
 	if ($cont8 % 2 == 0) {
-		$html3 .= '<td class="puntos fondo" style="width:' . $valorTabla . '%;"><center><font size="7"style="text-align: center;  font-family:dejavusanscondensed;">' . $rowRespuesta12['PerdidaParcial'] .'</font></center></td>';
+		$html3 .= '<td class="puntos fondo" style="width:' . $valorTabla . '%;"><center><font size="7"style="text-align: center;  font-family:dejavusanscondensed;">' . $perdidadeParcialhurto .'</font></center></td>';
 	} else {
-		$html3 .= '<td class="puntos fondo2" style="width:' . $valorTabla . '%;"><center><font size="7"style="text-align: center;  font-family:dejavusanscondensed;">' . $rowRespuesta12['PerdidaParcial'] .'</font></center></td>';
+		$html3 .= '<td class="puntos fondo2" style="width:' . $valorTabla . '%;"><center><font size="7"style="text-align: center;  font-family:dejavusanscondensed;">' . $perdidadeParcialhurto .'</font></center></td>';
 	}
 
 	$cont8 += 1;

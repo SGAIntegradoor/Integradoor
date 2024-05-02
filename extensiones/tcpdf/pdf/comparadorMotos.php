@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 header('Content-Type: text/html; charset=utf-8');
 date_default_timezone_set('America/Bogota');
@@ -11,17 +12,9 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
 
 $identificador = $_GET['cotizacion'];
 
-error_reporting(E_ERROR | E_PARSE);
-ini_set('display_errors', 0);
-
-// $server = "localhost";
-// $user = "root";
-// $password = ""; //poner tu propia contraseña, si tienes una.
-// $bd = "grupoasi_cotizautos";
-
 $server = "localhost";
-$user = "root";
-$password = ""; //poner tu propia contraseña, si tienes una.
+$user = "grupoasi_cotizautos";
+$password = "M1graci0n123"; //poner tu propia contraseña, si tienes una.
 $bd = "grupoasi_cotizautos";
 
 $conexion = mysqli_connect($server, $user, $password, $bd);
@@ -29,6 +22,7 @@ if (!$conexion) {
 	die('Error de Conexión: ' . mysqli_connect_errno());
 }
 $conexion->set_charset("utf8");
+$intermediario = $_SESSION['intermediario'];
 
 
 $query2 = "SELECT *	FROM cotizaciones, clientes WHERE cotizaciones.id_cliente = clientes.id_cliente AND `id_cotizacion` = $identificador";
@@ -38,6 +32,15 @@ $fila = mysqli_fetch_array($valor2);
 $query3 = "SELECT DISTINCT Aseguradora FROM ofertas WHERE `id_cotizacion` = $identificador";
 $valor3 = $conexion->query($query3);
 $fila2 = mysqli_num_rows($valor3);
+
+// :::::::::::::::::::::::Query para imagen logo::::::::::::::::::::::::::.
+$queryLogo = "SELECT urlLogo FROM intermediario  WHERE id_Intermediario = $intermediario";
+
+$valorLogo = $conexion->query($queryLogo);
+$valorLogo = mysqli_fetch_array($valorLogo);
+$valorLogo = $valorLogo['urlLogo'];
+
+$porciones = explode(".", $valorLogo);
 
 // Consulta las aseguradoras que fueron selecionadas para visualizar en el PDF
 $queryAsegSelec = "SELECT DISTINCT Aseguradora FROM ofertas WHERE `id_cotizacion` = $identificador AND `seleccionar` = 'Si'";
@@ -167,7 +170,13 @@ $pdf->AddPage();
 
 $pdf->Image('../../../vistas/img/logos/imagencotizador2.jpg', -5, 0, 0, 92, 'JPG', '', '', true, 200, '', false, false, 0, false, false, false);
 
-$pdf->Image('../../../vistas/img/logosIntermediario/LogoGA.png', 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
+if ($porciones[1] == 'png') {
+
+	$pdf->Image('../../../vistas/img/logosIntermediario/' . $valorLogo, 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
+} else {
+	$pdf->Image('../../../vistas/img/logosIntermediario/' . $valorLogo, 8, 13, 0, 20, 'JPG', '', '', true, 160, '', false, false, 0, false, false, false);
+}
+// $pdf->Image('../../../vistas/img/logosIntermediario/LogoGA.png', 8, 13, 0, 20, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
 
 $pdf->Image('../../../vistas/img/logos/cheque.png', 100.5, 180.5, 0, -12, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
 
@@ -1059,7 +1068,7 @@ while ($rowRespuesta8 = mysqli_fetch_assoc($respuestaquery8)) {
     // die();
 	$valorRC = $rowRespuesta8['ValorRC'];
 	$perdidaParcial = $rowRespuesta8['PerdidaParcial'];
-
+    
 	$queryConsultaAsistencia1 = "SELECT * FROM asistencias WHERE `aseguradora` LIKE '$nombreAseguradora' AND `producto` LIKE '$nombreProducto'";
 									// -- AND `rce` LIKE '$valorRC' AND `ppd` LIKE '$perdidaParcial'";
 	$respuestaqueryAsistencia1 =  $conexion->query($queryConsultaAsistencia1);

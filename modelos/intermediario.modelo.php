@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if(!isset($_SESSION)){
+    session_start();
+}
+
 
 require_once "conexion.php";
 
@@ -710,6 +713,13 @@ class ModeloInternediario{
             echo "falle";
         }
 
+    }
+
+    public static function mdlGetIntermediarios($tabla){
+        $stmt = Conexion::conectar()->prepare("SELECT * FROM :tabla");
+        $stmt->bindParam(":tabla", $tabla, PDO::PARAM_STR);
+        $stmt -> execute();
+        return $stmt -> fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

@@ -61,7 +61,7 @@ class ModeloClientes{
 	MOSTRAR CLIENTES
 	=============================================*/
 
-	static public function mdlMostrarClientes($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $item, $valor, $inter){
+	static public function mdlMostrarClientes($tabla, $tabla2, $tabla3, $tabla4, $tabla5, $item, $valor, $inter, $condition){
 		
 		$condicion = "";
 		$stmt = "";
@@ -73,7 +73,7 @@ class ModeloClientes{
 			if( $item == 'cli_num_documento'){
 
 				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla, $tabla2, $tabla3 WHERE $tabla.id_tipo_documento = $tabla2.id_tipo_documento 
-														AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $tabla.id_Intermediario = :intermediario AND $item = :$item");
+														AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $tabla.id_Intermediario = :intermediario AND $item = :$item LIMIT $condition");
 
                 $stmt->bindParam(":intermediario", $inter, PDO::PARAM_INT);
 				$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
@@ -85,7 +85,7 @@ class ModeloClientes{
 			}
 			else if($item == 'id_cliente'){
 			    $stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla, $tabla2, $tabla3 WHERE $tabla.id_tipo_documento = $tabla2.id_tipo_documento 
-														AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $item = :$item");
+														AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $item = :$item LIMIT $condition");
 				$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
 				$stmt -> execute();
 
@@ -98,7 +98,7 @@ class ModeloClientes{
 														$tabla3.id_estado_civil, concat_ws(' ', cli_num_documento, cli_nombre, cli_apellidos) as nomcompleto 
 														FROM $tabla, $tabla2, $tabla3 WHERE $tabla.id_tipo_documento = $tabla2.id_tipo_documento 
 														AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $tabla.cli_estado = 1 
-														AND concat_ws(' ', cli_num_documento, cli_nombre, cli_apellidos) LIKE :$item");
+														AND concat_ws(' ', cli_num_documento, cli_nombre, cli_apellidos) LIKE :$item LIMIT $condition");
 
 				$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
 				$stmt -> execute();
@@ -112,7 +112,7 @@ class ModeloClientes{
 
 		    // setcookie('if', 'else');
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla, $tabla2, $tabla3, $tabla5 WHERE $tabla.id_tipo_documento = $tabla2.id_tipo_documento 
-													AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $tabla.id_Intermediario = :intermediario $condicion GROUP BY $tabla.id_cliente");
+													AND $tabla.id_estado_civil = $tabla3.id_estado_civil AND $tabla.id_Intermediario = :intermediario $condicion GROUP BY $tabla.id_cliente LIMIT $condition");
 					
 					$stmt->bindParam(":intermediario", $intermediario, PDO::PARAM_INT);
 					

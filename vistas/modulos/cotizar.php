@@ -1,20 +1,15 @@
 <?php
-
-$DB_host = "localhost";
-$DB_user = "grupoasi_cotizautos";
-$DB_pass = "M1graci0n123";
-$DB_name = "grupoasi_cotizautos";
-
-//$DB_host = "52.15.158.65:3306";
-//$DB_user = "grupoasi_cotizautos";
-//$DB_pass = "M1graci0n123";
-//$DB_name = "grupoasi_cotizautos";
-
+// var_dump($aseguradoras);
+// die();
 // $DB_host = "localhost";
-// $DB_user = "root";
-// $DB_pass = "";
+// $DB_user = "grupoasi_cotizautos";
+// $DB_pass = "M1graci0n123";
 // $DB_name = "grupoasi_cotizautos";
 
+$DB_host = "localhost";
+$DB_user = "root";
+$DB_pass = "";
+$DB_name = "grupoasi_cotizautos";
 
 $enlace = mysqli_connect("$DB_host", "$DB_user", "$DB_pass", "$DB_name");
 if (!$enlace) {
@@ -25,7 +20,6 @@ if (!$enlace) {
 // mysqli_set_charset($enlace, "utf8");
 
 function obtenerCredenciales($enlace, $tabla, $columnas, $idIntermediario) {
-  //var_dump($columnas);
   $query = "SELECT $columnas FROM `$tabla` WHERE `id_intermediario` = '$idIntermediario'";
   $ejecucion = mysqli_query($enlace, $query);
   $numerofilas = mysqli_num_rows($ejecucion);
@@ -34,46 +28,59 @@ function obtenerCredenciales($enlace, $tabla, $columnas, $idIntermediario) {
   if ($numerofilas > 0) {
       return $fila;
   } else {
-      $query2 = "SELECT * FROM `$tabla` WHERE `id_intermediario` = 3";
-      $ejecucion2 = mysqli_query($enlace, $query2);
-      $fila2 = mysqli_fetch_assoc($ejecucion2);
-      return $fila2;
+      
+      return false;
   }
 }
 
+
 // FUNCION PARA OBTENER CREDENCIALES SBS
-$creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS', 'cre_sbs_usuario, cre_sbs_contrasena', $_SESSION['intermediario']);
+if ($aseguradoras['SBS']['C'] == "1") {
 
+  $creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS2', '*', $_SESSION['intermediario']);
+  
+}else{
+
+  $creSBS = obtenerCredenciales($enlace, 'Credenciales_SBS2', '*', '3');
+
+}
 $cre_sbs_usuario = $creSBS['cre_sbs_usuario'];
-$cre_sbs_contrasena = $creSBS['cre_sbs_contrasena']; // Aquí está el cambio
+$cre_sbs_contrasena = $creSBS['cre_sbs_contrasena'];
 
-// FUNCION PARA OBTENER CREDENCIALES ALLIANZ
-$creAllianz = obtenerCredenciales($enlace, 'Credenciales_Allianz', '*', $_SESSION['intermediario']);
+// Lógica para ALLIANZ
+if ($aseguradoras['Allianz']['C'] == "1") {
+  $creAllianz = obtenerCredenciales($enlace, 'Credenciales_Allianz', '*', $_SESSION['intermediario']);
 
+} else {
+  $creAllianz = obtenerCredenciales($enlace, 'Credenciales_Allianz', '*', '3');
+}
 $cre_alli_sslcertfile = $creAllianz['cre_alli_sslcertfile'];
 $cre_alli_sslkeyfile = $creAllianz['cre_alli_sslkeyfile'];
-
 $cre_alli_passphrase = $creAllianz['cre_alli_passphrase'];
 $cre_alli_partnerid = $creAllianz['cre_alli_partnerid'];
-
 $cre_alli_agentid = $creAllianz['cre_alli_agentid'];
 $cre_alli_partnercode = $creAllianz['cre_alli_partnercode'];
-
 $cre_alli_agentcode = $creAllianz['cre_alli_agentcode'];
 
+// Lógica para ESTADO
+if ($aseguradoras['Estado']['C'] == "1") {
+  $creEstado = obtenerCredenciales($enlace, 'Credenciales_Estado', '*', $_SESSION['intermediario']);
 
-// FUNCION PARA OBTENER CREDENCIALES ESTADO
-$creEstado = obtenerCredenciales($enlace, 'Credenciales_Estado', '*', $_SESSION['intermediario']);
-
+} else {
+  $creEstado = obtenerCredenciales($enlace, 'Credenciales_Estado', '*', '3');
+}
 $cre_est_usuario = $creEstado['cre_est_usuario'];
 $cre_equ_contrasena = $creEstado['cre_equ_contrasena'];
 $Cre_Est_Entity_Id = $creEstado['Cre_Est_Entity_Id'];
 $cre_est_zona = $creEstado['cre_est_zona'];
 
+// Lógica para AXA
+if ($aseguradoras['AXA']['C'] == "1") {
+  $creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', $_SESSION['intermediario']);
 
-// FUNCION PARA OBTENER CREDENCIALES AXA
-$creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', $_SESSION['intermediario']);
-
+} else {
+  $creAXA = obtenerCredenciales($enlace, 'Credenciales_AXA', '*', '3');
+}
 $cre_axa_sslcertfile = $creAXA['cre_axa_sslcertfile'];
 $cre_axa_sslkeyfile = $creAXA['cre_axa_sslkeyfile'];
 $cre_axa_passphrase = $creAXA['cre_axa_passphrase'];
@@ -84,8 +91,13 @@ $cre_axa_canal = $creAXA['cre_axa_canal'];
 $cre_axa_validacionEventos = $creAXA['cre_axa_validacionEventos'];
 $url_axa = $creAXA['url_axa'];
 
-$creSolidaria = obtenerCredenciales($enlace, 'Credenciales_Solidaria', '*', $_SESSION['intermediario']);
+// Lógica para SOLIDARIA
+if ($aseguradoras['Solidaria']['C'] == "1") {
+  $creSolidaria = obtenerCredenciales($enlace, 'Credenciales_Solidaria', '*', $_SESSION['intermediario']);
 
+} else {
+  $creSolidaria = obtenerCredenciales($enlace, 'Credenciales_Solidaria', '*', '3');
+}
 $cre_sol_id = $creSolidaria['cre_sol_id'] ?? null;
 $id_Intermediario = $creSolidaria['id_Intermediario'] ?? null;
 $cre_sol_cod_sucursal = $creSolidaria['cre_sol_cod_sucursal'] ?? null;
@@ -99,27 +111,18 @@ $cre_sol_token = $creSolidaria['cre_sol_token'] ?? null;
 $cre_sol_fecha_token = $creSolidaria['cre_sol_fecha_token'] ?? null;
 
 
-$query8 = "SELECT *  FROM `Credenciales_Bolivar` WHERE `id_Intermediario` = '" . $_SESSION["intermediario"] . "'";
+// Lógica para BOLIVAR
+if ($aseguradoras['Bolivar']['C'] == "1") {
+  $creBolivar = obtenerCredenciales($enlace, 'Credenciales_Bolivar', '*', $_SESSION['intermediario']);
 
-$ejecucion8 = mysqli_query($enlace, $query8);
-$numerofilas8 = mysqli_num_rows($ejecucion8);
-$fila8 = mysqli_fetch_assoc($ejecucion8);
-
-if ($numerofilas8 > 0) {
-  $cre_bol_api_key = $fila8['cre_bol_api_key'];
-  $cre_bol_claveAsesor = $fila8['cre_bol_claveAsesor'];
 } else {
-  $query9 = "SELECT * FROM `Credenciales_Bolivar` WHERE `id_Intermediario` = 3";
-
-  $ejecucion9 = mysqli_query($enlace, $query9);
-  $numerofilas9 = mysqli_num_rows($ejecucion9);
-  $fila9 = mysqli_fetch_assoc($ejecucion9);
-
-  $cre_bol_api_key = $fila9['cre_bol_api_key'];
-  $cre_bol_claveAsesor = $fila9['cre_bol_claveAsesor'];
+  $creBolivar = obtenerCredenciales($enlace, 'Credenciales_Bolivar', '*', '3');
 }
+$cre_bol_api_key = $creBolivar['cre_bol_api_key'] ?? null;
+$cre_bol_claveAsesor = $creBolivar['cre_bol_claveAsesor'] ?? null;
 
-
+// var_dump($aseguradoras);
+// die();
 // FUNCION PARA OBTENER CREDENCIALES SOLIDARIA
 // Repite el proceso para las demás credenciales
 // ...
@@ -615,7 +618,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                 <div class="col-xs-12 col-sm-6 col-md-12">
                     <div class="row">
                         <div class="col-xs-12 col-sm-6 col-md-2 form-group btnConsultarVeh">
-                            <button class="btn btn-primary btn-block" id="btnConsultarVeh">Consultar Vehículo</button>
+                            <button class="btn btn-primary btn-block" id="btnConsultarVehmanualbuscador">Consultar Vehículo</button>
                         </div>
                     </div>
                 </div>
@@ -634,7 +637,10 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
 
           <!-- FORMULARIO RESUMEN VEHICULO -->
           <form method="Post" id="formResumVeh">
+              
+              
             <div id="resumenVehiculo">
+                
               <div class="col-lg-12" id="headerVehiculo">
                 <div class="row row-veh">
                   <div class="col-xs-12 col-sm-6 col-md-3">
@@ -730,9 +736,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                         <option value="2">Antioquia</option>
                         <option value="3">Arauca</option>
                         <option value="4">Atlántico</option>
-                        <option value="5">Barranquilla</option>
 
-                        <option value="6">Bogotá</option>
                         <option value="7">Bolívar</option>
                         <option value="8">Boyacá</option>
                         <option value="9">Caldas</option>
@@ -854,90 +858,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                         </thead>
                         <tbody>
 
-                          <!-- Fila 1 - Aseguradora Allianz -->
-                          <tr id="Allianz">
-                            <td id="AllianzName">Allianz</td>
-                            <td class="text-center" id="AllianzResponse"></td>
-                            <td class="text-center" id="AllianzProducts"></td>
-                            <td id="AllianzObservation"></td>
-                          </tr>
-                          <!-- Fila 2 - Aseguradora AXA -->
-                          <tr id="AXA">
-                            <td id="AXA">AXA</td>
-                            <td class="text-center" id="AXAResponse"></td>
-                            <td class="text-center" id="AXAProducts"></td>
-                            <td id="AXAObservation"></td>
-                          </tr>
-                          <!-- Fila 3 - Aseguradora Bolivar -->
-                          <tr id="Bolivar">
-                            <td id="Bolivar">Bolivar</td>
-                            <td class="text-center" id="BolivarResponse"></td>
-                            <td class="text-center" id="BolivarProducts"></td>
-                            <td id="BolivarObservatIon3"></td>
-                          </tr>
-                          <!-- Fila 4 - Aseguradora Equidad -->
-                          <tr id="Equidad">
-                            <td id="Equidad">Equidad</td>
-                            <td class="text-center" id="EquidadResponse"></td>
-                            <td class="text-center" id="EquidadProducts"></td>
-                            <td id="EquidadObservation"></td>
-                          </tr>
-                          <!-- Fila 5 - Aseguradora Estado -->
-                          <tr id="Estado">
-                            <td id="Estado">Estado</td>
-                            <td class="text-center" id="EstadoResponse"></td>
-                            <td class="text-center" id="EstadoProducts"></td>
-                            <td id="EstadoObservation"></td>
-                          </tr>
-                          <!-- Fila 6 - Aseguradora HDI -->
-                          <tr id="HDI">
-                            <td id="HDI">HDI</td>
-                            <td class="text-center" id="HDIResponse"></td>
-                            <td class="text-center" id="HDIProducts"></td>
-                            <td id="HDIObservation"></td>
-                          </tr>
-                          <!-- Fila 7 - Aseguradora Liberty -->
-                          <tr id="Liberty">
-                            <td id="Liberty">Liberty</td>
-                            <td class="text-center" id="LibertyResponse"></td>
-                            <td class="text-center" id="LibertyProducts"></td>
-                            <td id="LibertyObservation"></td>
-                          </tr>
-                          <!-- Fila 8 - Aseguradora Mapfre -->
-                          <tr id="Mapfre">
-                            <td id="Mapfre">Mapfre</td>
-                            <td class="text-center" id="MapfreResponse"></td>
-                            <td class="text-center" id="MapfreProducts"></td>
-                            <td id="MapfreObservation"></td>
-                          </tr>
-                          <!-- Fila 9 - Aseguradora Previsora -->
-                          <tr id="Previsora">
-                            <td id="Previsora">Previsora</td>
-                            <td class="text-center" id="PrevisoraResponse"></td>
-                            <td class="text-center" id="PrevisoraProducts"></td>
-                            <td id="PrevisoraObservation"></td>
-                          </tr>
-                          <!-- Fila 10 - Aseguradora SBS -->
-                          <tr id="SBS">
-                            <td id="SBS">SBS</td>
-                            <td class="text-center" id="SBSResponse"></td>
-                            <td class="text-center" id="SBSProducts"></td>
-                            <td id="SBSObservation"></td>
-                          </tr>
-                          <!-- Fila 11 - Aseguradora Solidaria -->
-                          <tr id="Solidaria">
-                            <td id="Solidaria">Solidaria</td>
-                            <td class="text-center" id="SolidariaResponse"></td>
-                            <td class="text-center" id="SolidariaProducts"></td>
-                            <td id="SolidariaObservation"></td>
-                          </tr>
-                          <!-- Fila 12 - Aseguradora Zurich -->
-                          <tr id="Zurich">
-                            <td id="Zurich">Zurich</td>
-                            <td class="text-center" id="ZurichResponse"></td>
-                            <td class="text-center" id="ZurichProducts"></td>
-                            <td id="ZurichObservation"></td>
-                          </tr>
+                       
 
                         </tbody>
                       </table>
@@ -949,25 +870,20 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
                         </div>
                       <div class="col-md-3"></div>
                     </div>
-                    <div>
-                        <p class="text-justify"><strong>¿Por qué algunas compañías no cotizan? R/. 0.</strong>Tiene póliza vigente con esa compañía. <strong>1.</strong> Aseguradora
-                            caída, en mantenimiento o en actualización. <strong>2.</strong> RUNT, Cexper, Sistema Fasecolda caído. <strong>3.</strong> Fallas Portal
-                            Integradoor. <strong>4.</strong> Vehículo fuera de políticas por marca, línea o modelo. <strong>5.</strong> Ciudad bloqueada. <strong>6.</strong> Error en
-                            validación datos del asegurado. <strong>7.</strong> Valor asegurado no autorizado para cotizar vía webservice. <strong>8.</strong> Vehículo
-                            salvamento. <strong>9.</strong> Motos, Pesados, Públicos no se cotizan por este módulo. <strong>10.</strong> Personas Jurídicas se cotizan
-                            manualmente. <strong>11.</strong> Algunas aseguradoras no cotizan 0 km vía webservice. <strong>12.</strong> Vehículo bloqueado por cotización
-                            vigente con otro asesor (ej. Solidaria). <strong>13.</strong> Mal uso del usuario registrando espacios o caracteres en placas,
-                            nombres, apellidos o documentos de identidad
-                        </p>
                   </div>
-                  </div>
-                  
                 </div>
-                <div class="aviso-container col-lg-12">
-                    <p style="font-weight: bold;">
-                      NOTA: Si a tu cliente le interesa Previsora, ten en cuenta que ciertas líneas de vehículos requieren la instalación del dispositivo Cazador al tomar su seguro y este tiene un costo adicional a la póliza. Por favor confirma con tu área comercial.
-                    </p>
-              </div>
+                
+              
+                  <div id="mensajePrevisora">
+                    <div class="aviso-container col-lg-12">
+                        <p style="font-weight: bold;">
+                          NOTA: Si a tu cliente le interesa Previsora, ten en cuenta que ciertas líneas de vehículos requieren la instalación del dispositivo Cazador al tomar su seguro y este tiene un costo adicional a la póliza. Por favor confirma con tu área comercial.
+                        </p>
+                    </div>
+                  </div>
+
+              
+              
               </div>
             </div>
           </div>
@@ -989,21 +905,7 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
             <div id="cardAgregarCotizacion">
             </div>
 
-            <div id="contenCotizacionPDF">
-
-              <div class="col-xs-12" style="width: 100%;">
-                <div class="row align-items-center">
-                  <div class="col-xs-4">
-                    <label for="checkboxAsesorEditar">¿Deseas agregar tus datos como asesor en la cotización?</label>
-                    <input class="form-check-input" type="checkbox" id="checkboxAsesorEditar" style="margin-left: 10px;" checked>
-                  </div>
-                  <div class="col-xs-4">
-                    <button type="button" class="btn btn-danger" id="btnParrillaPDF">
-                      <span class="fa fa-file-text"></span> Generar PDF de Cotización
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div id="contenCotizacionPDFLivianos">
 
             </div>
 
@@ -1013,6 +915,8 @@ $idIntermediario = $_SESSION['permisos']['id_Intermediario'];
 
         <!-- CAMPOS OCULTOS PARA OPTENER LA INFORMACION-->
         <div style="display: none;">
+          <label>Aseguradoras</label>
+          <input type="hidden" name="aseguradoras" id="aseguradoras" value='<?php echo json_encode($aseguradoras); ?>'>
           <label>Intermediario</label>
           <input type="hidden" name="idIntermediario" id="idIntermediario" value="<?php echo $idIntermediario; ?>">
           <label>Rol Asesor</label>

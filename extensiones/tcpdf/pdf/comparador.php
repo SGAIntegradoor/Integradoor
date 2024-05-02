@@ -5,9 +5,6 @@ $intermediario = $_SESSION['intermediario'];
 
 header('Content-Type: text/html; charset=utf-8');
 date_default_timezone_set('America/Bogota');
-error_reporting(E_ALL & ~E_NOTICE);
- ini_set('display_errors', 0);
- ini_set('log_errors', 1);
 
 // Incluye la biblioteca TCPDF principal (busca la ruta de instalación).
 require_once('tcpdf_include.php');
@@ -18,8 +15,8 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
 $identificador = $_GET['cotizacion'];
 
 $server = "localhost";
-$user = "root";
-$password = ""; //poner tu propia contraseña, si tienes una.
+$user = "grupoasi_cotizautos";
+$password = "M1graci0n123"; //poner tu propia contraseña, si tienes una.
 $bd = "grupoasi_cotizautos";
 
 $conexion = mysqli_connect($server, $user, $password, $bd);
@@ -171,7 +168,7 @@ $pdf->AddPage();
 //$pdf->Image('../../../vistas/img/logos/imagencotizador.jpg', -5, 0, 0, 92, 'JPG', '', '', true, 160, '', false, false, 0, false, false, false);
 //$pdf->Image('../../../vistas/img/logos/cheque.png', 99.5, 159.5, 0, 0, 'PNG', '', '', true, 160, '', false, false, 0, false, false, false);
 
-$pdf->Image('../../../vistas/img/logos/cheque.png', -5, 0, 0, 92, 'PNG', '', '', true, 200, '', false, false, 0, false, false, false);
+$pdf->Image('../../../vistas/img/logos/imagencotizador2.jpg', -5, 0, 0, 92, 'JPG', '', '', true, 200, '', false, false, 0, false, false, false);
 
 
 
@@ -1097,7 +1094,6 @@ while ($rowRespuesta11 = mysqli_fetch_assoc($respuestaquery11)) {
 
 	$nombreAseguradora = nombreAseguradora($rowRespuesta11['Aseguradora']);
 	$nombreProducto = productoAseguradora($rowRespuesta11['Aseguradora'], $rowRespuesta11['Producto']);
-	var_dump($valorTabla);
 
 	if ($cont7 % 2 == 0) {
 		$html3 .= '<td class="puntos fondo" style="width:' . $valorTabla . '%;"><center><div style="font-size:4pt">&nbsp;</div><font size="7"style="text-align: center;  font-family:dejavusanscondensed;">' . $rowRespuesta11['PerdidaParcial'] . '</font></center></td>';
@@ -1147,9 +1143,9 @@ $html3 .= '<td class="puntos fondo" style="width:10%; text-align: center; font-f
 
 $query13 = "SELECT * FROM ofertas WHERE `id_cotizacion` = $identificador AND `seleccionar` = 'Si'";
 $respuestaquery13 =  $conexion->query($query13);
-
 $cont9 = 1;
 while ($rowRespuesta13 = mysqli_fetch_assoc($respuestaquery13)) {
+
 	$nombreAseguradora = nombreAseguradora($rowRespuesta13['Aseguradora']);
 	$nombreProducto = productoAseguradora($rowRespuesta13['Aseguradora'], $rowRespuesta13['Producto']);
 

@@ -16,32 +16,72 @@ $PT = $_POST['PT'];
 $PP = $_POST['PP'];
 $CE = $_POST['CE'];
 $GR = $_POST['GR'];
-$logo = "vistas/img/logos/".$_POST['logo'];
-$UrlPdf = $_POST['UrlPdf'] ?? null;
+$logo = "vistas/img/logos/" . $_POST['logo'];
+$UrlPdf = $_POST['UrlPdf'];
 $manual = $_POST['manual'];
-// var_dump($UrlPdf);
-// die();
 
-// $familiar = $_POST['responsabilidad_civil_familiar'];
-
-
-$sql ="INSERT INTO `ofertas` (`id_oferta`, `Placa`, `Identificacion`, `NumCotizOferta`, `Aseguradora`, `Producto`, `Prima`, 
-					`ValorRC`, `PerdidaTotal`, `PerdidaParcial`, `ConductorElegido`, `Grua`, `logo`, `UrlPdf`, `id_cotizacion`, `Manual`) 
+if ($aseguradora == "Axa Colpatria") {
+	$sql = "INSERT INTO `ofertas` (`id_oferta`, `Placa`, `Identificacion`, `NumCotizOferta`, `Aseguradora`, `Producto`, `Prima`, 
+					`ValorRC`, `PerdidaTotal`, `PerdidaParcial`, `ConductorElegido`, `Grua`, `logo`, `UrlPdf`, `id_cotizacion`, `Manual`, `ResponsabilidadCivilGeneralFamiliar`, `PerdidaParcialHurto`)
 		VALUES (NULL, '$placa', '$numIdentificacion', '$numCotizOferta', '$aseguradora', '$producto', '$valorPrima', '$valorRC', 
-						'$PT', '$PP', '$CE', '$GR', '$logo', '$UrlPdf', '$idCotizacion', $manual);";
+						'$PT', '$PP', '$CE', '$GR', '$logo', '$UrlPdf', '$idCotizacion', $manual, NULL, NULL);";
 
-$res = mysqli_query($con, $sql);
-$num_rows = mysqli_affected_rows($con);
-// printf("Columnas Afectadas (INSERT): %d\n", mysqli_affected_rows($con));
+	$res = mysqli_query($con, $sql);
+	$num_rows = mysqli_affected_rows($con);
+	// printf("Columnas Afectadas (INSERT): %d\n", mysqli_affected_rows($con));
 
-if ($num_rows > 0) {
-	
-	$data['Success'] = $res;
-	$data['Message'] = 'La inserción fue exitosa';
-	echo json_encode($data, JSON_UNESCAPED_UNICODE);
-	
-}else{
-	$data['Success'] = $res;
-	$data['Message'] = 'Error: ' . mysqli_error($con);
-	echo json_encode($data, JSON_UNESCAPED_UNICODE);
+	if ($num_rows > 0) {
+		$data['Success'] = $res;
+		$data['Message'] = 'La inserción fue exitosa';
+		echo json_encode($data, JSON_UNESCAPED_UNICODE);
+	} else {
+		$data['Success'] = $res;
+		$data['Message'] = 'Error: ' . mysqli_error($con);
+		echo json_encode($data, JSON_UNESCAPED_UNICODE);
+	}
+} else {
+	$familiar = $_POST['responsabilidad_civil_familiar'];
+	$pph = $_POST['pph'] ? $_POST['pph'] : NULL ;
+
+	if (isset($pph)) {
+		$sql = "INSERT INTO `ofertas` (`id_oferta`, `Placa`, `Identificacion`, `NumCotizOferta`, `Aseguradora`, `Producto`, `Prima`, 
+					`ValorRC`, `PerdidaTotal`, `PerdidaParcial`, `ConductorElegido`, `Grua`, `logo`, `UrlPdf`, `id_cotizacion`, `Manual`, `ResponsabilidadCivilGeneralFamiliar`, `PerdidaParcialHurto`) 
+		VALUES (NULL, '$placa', '$numIdentificacion', '$numCotizOferta', '$aseguradora', '$producto', '$valorPrima', '$valorRC', 
+						'$PT', '$PP', '$CE', '$GR', '$logo', '$UrlPdf', '$idCotizacion', '$manual', '$familiar', '$pph');";
+
+		$res = mysqli_query($con, $sql);
+		$num_rows = mysqli_affected_rows($con);
+		// printf("Columnas Afectadas (INSERT): %d\n", mysqli_affected_rows($con));
+
+		if ($num_rows > 0) {
+
+			$data['Success'] = $res;
+			$data['Message'] = 'La inserción fue exitosa';
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		} else {
+			$data['Success'] = $res;
+			$data['Message'] = 'Error: ' . mysqli_error($con);
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		}
+	} else {
+		$sql = "INSERT INTO `ofertas` (`id_oferta`, `Placa`, `Identificacion`, `NumCotizOferta`, `Aseguradora`, `Producto`, `Prima`, 
+					`ValorRC`, `PerdidaTotal`, `PerdidaParcial`, `ConductorElegido`, `Grua`, `logo`, `UrlPdf`, `id_cotizacion`, `Manual`, `ResponsabilidadCivilGeneralFamiliar`, `PerdidaParcialHurto`) 
+		VALUES (NULL, '$placa', '$numIdentificacion', '$numCotizOferta', '$aseguradora', '$producto', '$valorPrima', '$valorRC', 
+						'$PT', '$PP', '$CE', '$GR', '$logo', '$UrlPdf', '$idCotizacion', $manual, null, null);";
+
+		$res = mysqli_query($con, $sql);
+		$num_rows = mysqli_affected_rows($con);
+		// printf("Columnas Afectadas (INSERT): %d\n", mysqli_affected_rows($con));
+
+		if ($num_rows > 0) {
+
+			$data['Success'] = $res;
+			$data['Message'] = 'La inserción fue exitosa';
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		} else {
+			$data['Success'] = $res;
+			$data['Message'] = 'Error: ' . mysqli_error($con);
+			echo json_encode($data, JSON_UNESCAPED_UNICODE);
+		}
+	}
 }

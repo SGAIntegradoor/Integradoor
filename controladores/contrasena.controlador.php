@@ -30,6 +30,7 @@ require "../modelos/password.modelo.php";
 			  }
 			}
 		  }
+		  die();
 	}
 
 	function enviarCorreo($email){
